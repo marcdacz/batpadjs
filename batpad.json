@@ -1,0 +1,35 @@
+[
+	{
+		"label": "Validate Posting Valid Data",
+		"request": {
+			"baseJSON": "base",
+			"fields": [
+				{ "path": "$.id", "value": 123456 },
+				{ "path": "$.title", "value": "My Amazing Post" },
+				{ "path": "$.body", "value": "This is my amazing post with valid values" }
+			]
+		},
+		"response": {
+			"status": 201,
+			"fields": [
+				{ "path": "$.title", "value": "My Amazing Post" },
+				{ "path": "$.body", "value": "This is my amazing post with valid values" }
+			]
+		}
+	},
+	{
+		"label": "Validate Posting Duplicate ID",
+		"request": {
+			"baseJSON": "base",
+			"fields": [
+				{ "path": "$.id", "value": 1 }
+			]
+		},
+		"response": {
+			"status": 500,
+			"matchStrings": [
+				"Error: Insert failed, duplicate id"
+			]
+		}
+	}
+]

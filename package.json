@@ -1,0 +1,23 @@
+{
+  "name": "BatPadJS",
+  "version": "1.0.0",
+  "description": "Declarative Specification-based API Test Automation Framework",
+  "main": "index.js",
+  "bin": {
+    "batpad": "./cli/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcdacz/BatPadJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcdacz/BatPadJS/issues"
+  },
+  "homepage": "https://github.com/marcdacz/BatPadJS#readme"
+}
