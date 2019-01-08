@@ -19,5 +19,14 @@
   "bugs": {
     "url": "https://github.com/marcdacz/BatPadJS/issues"
   },
-  "homepage": "https://github.com/marcdacz/BatPadJS#readme"
+  "homepage": "https://github.com/marcdacz/BatPadJS#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3"
+  }
 }
