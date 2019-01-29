@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/marcdacz/BatPadJS#readme",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "bluebird": "^3.5.3",
+    "chalk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

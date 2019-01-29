@@ -1,22 +1,27 @@
 {
-  "id": "",
+  "id": "Sample Test",
   "configs": {
-    "paths": {
-      "data": "/data",
-      "scripts": "/scripts",
-      "reports": "/reports"
-    },
     "baseUrl": "https://jsonplaceholder.typicode.com",
     "defaultEndpoint": "/posts",
-    "defaultMethod": "POST",
-    "beforeAllScript": "",
-    "afterAllScript": ""
+    "defaultMethod": "post",
+    "defaultBody": {},
+    "asyncLimit": 1,
+    "delay": 2000,
+    "beforeAllScript": "scripts/beforeAllScript.js",
+    "afterAllScript": "scripts/afterAllScript.js"
   },
   "scenarios": [
     {
       "label": "Validate Posting Valid Data",
+      "beforeScript": "scripts/beforeScript.js",
+      "afterScript": "scripts/afterScript.js",
       "request": {
-        "body": {},
+        "method": "post",
+        "body": {
+          "id": 12345,
+          "title": "Foo",
+          "body": "Blah blah blah 1"
+        },
         "fields": [
           { "path": "$.id", "value": 123456 },
           { "path": "$.title", "value": "My Amazing Post" },
@@ -40,8 +45,11 @@
     {
       "label": "Validate Posting Duplicate ID",
       "request": {
-        "baseJSON": "base",
-        "fields": [{ "path": "$.id", "value": 1 }]
+        "body": {
+          "id": 6789,
+          "title": "Bar",
+          "body": "Blah blah blah 2"
+        }
       },
       "response": {
         "status": 500,
