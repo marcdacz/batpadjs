@@ -29,7 +29,7 @@ module.exports.runTests = async testSuite => {
   runScript(configs.beforeAllScript);
 
   // --- EXECUTE SCENARIO ---
-  Promise.map(
+  await Promise.map(
     scenarios,
     scenario => {
       return new Promise(function(resolve, reject) {
@@ -37,10 +37,10 @@ module.exports.runTests = async testSuite => {
       });
     },
     { concurrency: configs.asyncLimit }
-  ).then(() => {
-    // --- AFTER ALL SCRIPT ---
-    runScript(configs.afterAllScript);
-  });
+  );
+    
+  // --- AFTER ALL SCRIPT ---
+  runScript(configs.afterAllScript);
 };
 
 const getMethod = scenario => {
