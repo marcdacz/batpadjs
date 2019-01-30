@@ -6,9 +6,8 @@ const chalk = require("chalk");
 const { log } = console;
 
 const DEFAULT_METHOD = "get";
-let configs;
 
-const runScript = async scriptPath => {
+const runScript = async (scriptPath, configs) => {
   if (scriptPath) {
     let scriptResolvedPath = path.resolve(scriptPath);
     if (fs.existsSync(scriptResolvedPath)) {
@@ -20,45 +19,45 @@ const runScript = async scriptPath => {
 };
 
 module.exports.runTests = async testSuite => {
+  const configs = testSuite.configs;
   const scenarios = testSuite.scenarios;
-  log(chalk.yellow("RUNNING TEST SUITE:", testSuite.id));
-
-  configs = testSuite.configs;
+  
+  log(chalk.yellow("RUNNING TEST SUITE:", testSuite.id));  
 
   // --- BEFORE ALL SCRIPT ---
-  runScript(configs.beforeAllScript);
+  runScript(configs.beforeAllScript, configs);
 
   // --- EXECUTE SCENARIO ---
   await Promise.map(
     scenarios,
     scenario => {
       return new Promise(function(resolve, reject) {
-        setTimeout(() => resolve(executeScenario(scenario)), configs.delay);
+        setTimeout(() => resolve(executeScenario(scenario, configs)), configs.delay);
       });
     },
     { concurrency: configs.asyncLimit }
   );
     
   // --- AFTER ALL SCRIPT ---
-  runScript(configs.afterAllScript);
+  runScript(configs.afterAllScript, configs);
 };
 
-const getMethod = scenario => {
-  return scenario.request.method || configs.defaultMethod || DEFAULT_METHOD;
-};
-
-const executeScenario = async scenario => {
+const executeScenario = async (scenario, configs) => {
   log(chalk.yellow("RUNNING TEST:", scenario.label));
-  
+
+  scenario.request = scenario.request ? scenario.request : {};
+
   // --- BEFORE SCRIPT ---
+  runScript(configs.beforeEachScript);
   runScript(scenario.beforeScript);
 
-  // --- SEND REQUEST ---
-  log("Body:", JSON.stringify(scenario.request.body));
+  // --- REQUEST SCRIPT ---
+  require('./requestScript')(scenario, configs);
 
+  // --- SEND REQUEST ---
   try {
     const res = await axios({
-      method: getMethod(scenario),
+      method: scenario.request.method || configs.defaultMethod || DEFAULT_METHOD,
       url: configs.baseUrl + configs.defaultEndpoint,
       data: scenario.request.body
     });
@@ -67,9 +66,8 @@ const executeScenario = async scenario => {
   } catch (error) {
     log("Response error", error);
   }
-  // -- ASSERT RESPONSE ---
-
 
   // --- AFTER SCRIPT ---
   runScript(scenario.afterScript);
+  runScript(configs.afterEachScript);
 };

@@ -4,10 +4,16 @@
     "baseUrl": "https://jsonplaceholder.typicode.com",
     "defaultEndpoint": "/posts",
     "defaultMethod": "post",
-    "defaultBody": {},
+    "defaultBody": {
+      "id": 88888,
+      "title": "BarBar",
+      "body": "Blah blah blah 2"
+    },
+    "defaultBodyPath": "./data/body.json",
     "asyncLimit": 1,
     "delay": 2000,
     "beforeAllScript": "scripts/beforeAllScript.js",
+    "beforeEachScript": "scripts/beforeEachScript.js",
     "afterAllScript": "scripts/afterAllScript.js"
   },
   "scenarios": [
@@ -44,13 +50,6 @@
     },
     {
       "label": "Validate Posting Duplicate ID",
-      "request": {
-        "body": {
-          "id": 6789,
-          "title": "Bar",
-          "body": "Blah blah blah 2"
-        }
-      },
       "response": {
         "status": 500,
         "matchStrings": ["Error: Insert failed, duplicate id"]
