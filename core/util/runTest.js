@@ -2,8 +2,7 @@ const axios = require("axios");
 const Promise = require("bluebird");
 const fs = require("fs");
 const path = require("path");
-const chalk = require("chalk");
-const { log } = console;
+const log = require("./logger");
 
 const DEFAULT_METHOD = "get";
 
@@ -13,7 +12,7 @@ const runScript = async (scriptPath, configs) => {
     if (fs.existsSync(scriptResolvedPath)) {
       await require(scriptResolvedPath)(configs);
     } else {
-      log(chalk.yellow(`WARNING: Script not found: ${scriptPath}`));
+      log.warn(`WARNING: Script not found: ${scriptPath}`);
     }
   }
 };
@@ -22,7 +21,7 @@ module.exports.runTests = async testSuite => {
   const configs = testSuite.configs;
   const scenarios = testSuite.scenarios;
   
-  log(chalk.yellow("RUNNING TEST SUITE:", testSuite.id));  
+  log.info(`RUNNING SUITE: ${testSuite.id}`);  
 
   // --- BEFORE ALL SCRIPT ---
   runScript(configs.beforeAllScript, configs);
@@ -43,7 +42,7 @@ module.exports.runTests = async testSuite => {
 };
 
 const executeScenario = async (scenario, configs) => {
-  log(chalk.yellow("RUNNING TEST:", scenario.label));
+  log.info(`RUNNING SCENARIO: ${scenario.label}`);  
 
   scenario.request = scenario.request ? scenario.request : {};
 
@@ -61,10 +60,10 @@ const executeScenario = async (scenario, configs) => {
       url: configs.baseUrl + configs.defaultEndpoint,
       data: scenario.request.body
     });
-    log("Response status", res.status);
-    log("Response body", res.data);
+    log.error("Response status: " + res.status);
+    log.success("Response body: " + JSON.stringify(res.data));
   } catch (error) {
-    log("Response error", error);
+    log.error("Response error: " + error);
   }
 
   // --- AFTER SCRIPT ---

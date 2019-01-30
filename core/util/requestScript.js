@@ -19,7 +19,7 @@ const getBodyFromPath = bodyPath => {
 module.exports = async (scenario, configs) => {
   let bodyFromPath = getBodyFromPath(scenario.request.bodyPath) || getBodyFromPath(configs.defaultBodyPath);
   scenario.request.body = scenario.request.body || bodyFromPath || configs.defaultBody;
-  if (scenario.request && scenario.request.fields) {
+  if (scenario.request.fields) {
     for (const field of scenario.request.fields) {
       jsonpath.value(scenario.request.body, field.path, field.value);
     }
