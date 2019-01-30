@@ -3,7 +3,7 @@ const Promise = require("bluebird");
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
-const log = console.log;
+const { log } = console;
 
 const DEFAULT_METHOD = "get";
 let configs;
@@ -21,7 +21,7 @@ const runScript = async scriptPath => {
 
 module.exports.runTests = async testSuite => {
   const scenarios = testSuite.scenarios;
-  console.log(chalk.blue("RUNNING TEST SUITE:", testSuite.id));
+  log(chalk.yellow("RUNNING TEST SUITE:", testSuite.id));
 
   configs = testSuite.configs;
 
@@ -44,30 +44,28 @@ module.exports.runTests = async testSuite => {
 };
 
 const getMethod = scenario => {
-  return scenario.request.method
-    ? scenario.request.method
-    : configs.defaultMethod
-    ? configs.defaultMethod
-    : DEFAULT_METHOD;
+  return scenario.request.method || configs.defaultMethod || DEFAULT_METHOD;
 };
 
 const executeScenario = async scenario => {
+  log(chalk.yellow("RUNNING TEST:", scenario.label));
+  
   // --- BEFORE SCRIPT ---
   runScript(scenario.beforeScript);
 
   // --- SEND REQUEST ---
-  console.log("Body:", JSON.stringify(scenario.request.body));
+  log("Body:", JSON.stringify(scenario.request.body));
 
   try {
-    let res = await axios({
+    const res = await axios({
       method: getMethod(scenario),
       url: configs.baseUrl + configs.defaultEndpoint,
       data: scenario.request.body
     });
-    console.log(res.status);
-    console.log(res.data);
+    log("Response status", res.status);
+    log("Response body", res.data);
   } catch (error) {
-    console.log(error);
+    log("Response error", error);
   }
   // -- ASSERT RESPONSE ---
 
