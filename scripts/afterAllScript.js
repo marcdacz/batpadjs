@@ -1,4 +1,4 @@
 module.exports = async (scenario) => {
-  console.log('Yey! Im in afterAll...');
+  console.log('Yay! Im in afterAll...');
 
 };

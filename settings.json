@@ -1,0 +1,8 @@
+{
+  "paths": {    
+    "data": "/data",
+    "reports": "/reports",
+    "scripts": "/scripts",
+    "tests": "/tests"
+  }
+}

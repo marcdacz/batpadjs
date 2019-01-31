@@ -1,3 +1,3 @@
 module.exports = async (scenario) => {
-  console.log('Yey! Im in before...');
+  console.log('Yay! Im in before...');
 };

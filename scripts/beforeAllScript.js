@@ -1,4 +1,4 @@
 module.exports = async (configs) => {
-  console.log('Yey! Im in beforeAll...');
+  console.log('Yay! Im in beforeAll...');
   
 };

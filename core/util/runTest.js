@@ -21,7 +21,7 @@ module.exports.runTests = async testSuite => {
   const configs = testSuite.configs;
   const scenarios = testSuite.scenarios;
   
-  log.info(`RUNNING SUITE: ${testSuite.id}`);  
+  log.success(testSuite.name);  
 
   // --- BEFORE ALL SCRIPT ---
   runScript(configs.beforeAllScript, configs);
@@ -42,9 +42,9 @@ module.exports.runTests = async testSuite => {
 };
 
 const executeScenario = async (scenario, configs) => {
-  log.info(`RUNNING SCENARIO: ${scenario.label}`);  
-
   scenario.request = scenario.request ? scenario.request : {};
+  scenario.result = {};
+  scenario.result.context = [];
 
   // --- BEFORE SCRIPT ---
   runScript(configs.beforeEachScript);
@@ -60,11 +60,13 @@ const executeScenario = async (scenario, configs) => {
       url: configs.baseUrl + configs.defaultEndpoint,
       data: scenario.request.body
     });
-    log.error("Response status: " + res.status);
-    log.success("Response body: " + JSON.stringify(res.data));
+    scenario.actualResponse = res;    
   } catch (error) {
     log.error("Response error: " + error);
   }
+
+  // --- RESPONSE SCRIPT ---
+  require('./responseScript')(scenario, configs);
 
   // --- AFTER SCRIPT ---
   runScript(scenario.afterScript);

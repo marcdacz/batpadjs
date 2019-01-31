@@ -1,5 +1,5 @@
 {
-  "id": "Sample Test",
+  "name": "Sample Test",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
     "defaultEndpoint": "/posts",
@@ -18,7 +18,7 @@
   },
   "scenarios": [
     {
-      "label": "Validate Posting Valid Data",
+      "test": "Validate Posting Valid Data",
       "beforeScript": "scripts/beforeScript.js",
       "afterScript": "scripts/afterScript.js",
       "request": {
@@ -29,30 +29,26 @@
           "body": "Blah blah blah 1"
         },
         "fields": [
-          { "path": "$.id", "value": 123456 },
           { "path": "$.title", "value": "My Amazing Post" },
-          {
-            "path": "$.body",
-            "value": "This is my amazing post with valid values"
-          }
+          { "path": "$.body", "value": "This is my amazing post with valid values" }
         ]
       },
       "response": {
         "status": 201,
         "fields": [
           { "path": "$.title", "value": "My Amazing Post" },
-          {
-            "path": "$.body",
-            "value": "This is my amazing post with valid values"
-          }
+          { "path": "$.body", "value": "This is my amazing post with valid values" }
         ]
       }
     },
     {
-      "label": "Validate Posting Duplicate ID",
+      "test": "Validate Posting Default Body Path",
       "response": {
-        "status": 500,
-        "matchStrings": ["Error: Insert failed, duplicate id"]
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "FooFoo" },
+          { "path": "$.body", "value": "Blah blah blah X" }
+        ]
       }
     }
   ]
