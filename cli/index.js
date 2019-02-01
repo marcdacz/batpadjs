@@ -1,4 +1,9 @@
 #!/usr/bin/env node
-const testRunner = require("../core/util/runTest");
-const testSuite = require("../batpad");
-testRunner.runTests(testSuite);
+const fileHelpers = require("../core/util/fileHelpers")
+const testRunner = require("../core/util/testSuiteRunner");
+
+const testSuites = fileHelpers.getJsFiles("./tests");
+testSuites.map(testSuite => {
+  testRunner.runTests(fileHelpers.requireUncached(testSuite.path));
+})
+
