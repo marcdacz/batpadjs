@@ -1,0 +1,41 @@
+{
+  "name": "BatPadJS Tests: Configs Tests 2",
+  "configs": {
+    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "defaultEndpoint": "/posts",
+    "defaultMethod": "post",    
+    "defaultBody": {
+      "id": 123456,
+      "title": "Using Default Body from Configs",
+      "body": "This test uses default body from test suite configs"
+    }
+  },
+  "scenarios": [
+    {
+      "test": "Validate Using Default Body from Configs",      
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Using Default Body from Configs" },
+          { "path": "$.body", "value": "This test uses default body from test suite configs" }
+        ]
+      }
+    },
+    {
+      "test": "Validate Updating Fields of Body from Configs",      
+      "request": {
+        "fields": [
+          { "path": "$.title", "value": "Updating Configs Body Fields" },
+          { "path": "$.body", "value": "This test will verify updating json fields" }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Updating Configs Body Fields" },
+          { "path": "$.body", "value": "This test will verify updating json fields" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "name": "BatPadJS Tests: Configs Tests 1",
+  "configs": {
+    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "defaultEndpoint": "/posts",
+    "defaultMethod": "post",    
+    "defaultBodyPath": "data/bodyFromFile.json"
+  },
+  "scenarios": [
+    {
+      "test": "Validate Using Default Method and Endpoint",      
+      "request": {
+        "body": {
+          "id": 12345,
+          "title": "Using default method and endpoint",
+          "body": "This test uses the default method and endpoint"
+        }
+      },
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Using default method and endpoint" },
+          { "path": "$.body", "value": "This test uses the default method and endpoint" }
+        ]
+      }
+    }, 
+    {
+      "test": "Validate Updating Fields from Scenario Body",      
+      "request": {
+        "body": {
+          "id": 12345,
+          "title": "Using default method and endpoint",
+          "body": "This test uses the default method and endpoint"
+        },
+        "fields": [
+          { "path": "$.title", "value": "Updating Scenario Body Fields" },
+          { "path": "$.body", "value": "This test will verify updating json fields" }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Updating Scenario Body Fields" },
+          { "path": "$.body", "value": "This test will verify updating json fields" }
+        ]
+      }
+    },    
+    {
+      "test": "Validate Using Scenario Method and Endpoint",      
+      "request": {
+        "url": "/posts/1",
+        "method": "get"
+      },
+      "response": {
+        "status": 200,
+        "fields": [
+          { "path": "$.title", "value": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" },
+          { "path": "$.body", "value": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto" }
+        ]
+      }
+    }, 
+    {
+      "test": "Validate Posting Default Body Path",
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "This is a title from a file" },
+          { "path": "$.body", "value": "This is a body from a file" }
+        ]
+      }
+    },
+    {
+      "test": "Validate Updating Json Fields from Default Body Path",
+      "request": {
+        "fields": [
+          { "path": "$.title", "value": "Updating Default Body from File" },
+          { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Updating Default Body from File" },
+          { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
+        ]
+      }
+    }
+  ]
+}

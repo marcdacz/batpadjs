@@ -1,0 +1,84 @@
+{
+  "name": "BatPadJS Tests: REST Method Tests",
+  "configs": {
+    "baseUrl": "https://jsonplaceholder.typicode.com"  
+  },
+  "scenarios": [    
+    {
+      "test": "Validate GET Method",
+      "request": {
+        "url": "/users/1/albums",
+        "method": "get"
+      },
+      "response": {
+        "status": 200,
+        "fields": [
+          { "path": "$[0].title", "value": "quidem molestiae enim" }
+        ]
+      }
+    },
+    {
+      "test": "Validate POST Method",
+      "request": {
+        "url": "/posts",
+        "method": "post",
+        "body": {
+          "title": "Testing Post Method",
+          "body": "This test verifies the post method"
+        }
+      },
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Testing Post Method" }
+        ]
+      }
+    },
+    {
+      "test": "Validate PUT Method",
+      "request": {
+        "url": "/posts/1",
+        "method": "put",
+        "body": {
+          "id": 1,
+          "userId": 1,
+          "title": "Testing Put Method",
+          "body": "This test verifies the put method"
+        }
+      },
+      "response": {
+        "status": 200,
+        "fields": [
+          { "path": "$.title", "value": "Testing Put Method" }
+        ]
+      }
+    },
+    {
+      "test": "Validate PATCH Method",
+      "request": {
+        "url": "/posts/1",
+        "method": "patch",
+        "body": {
+          "title": "Testing Patch Method",
+          "body": "This test verifies the patch method"
+        }
+      },
+      "response": {
+        "status": 200,
+        "fields": [
+          { "path": "$.title", "value": "Testing Patch Method" }
+        ]
+      }
+    },
+    {
+      "test": "Validate DELETE Method",
+      "request": {
+        "url": "/posts/1",
+        "method": "delete"
+      },
+      "response": {
+        "status": 200
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@ let isFailed;
 module.exports = async (scenario, configs) => {  
   scenario.result.state = 'passed';  
   isFailed = false;
-
+  
   if (scenario.response && scenario.actualResponse) {
     let expectedResponse = scenario.response;
     let actualResponse = scenario.actualResponse;

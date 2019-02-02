@@ -1,0 +1,35 @@
+{
+  "name": "BatPadJS Tests: Scripts Tests 1",
+  "configs": {
+    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "defaultEndpoint": "/posts",
+    "defaultMethod": "post",  
+    "defaultBody": {
+      "id": 123456,
+      "title": "Using Default Body from Configs",
+      "body": "This test uses default body from test suite configs"
+    }, 
+    "beforeAllScript": "scripts/beforeAllScript.js"
+  },
+  "scenarios": [
+    {
+      "test": "Validate BeforeAll Script",
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Using Default Body from Configs updated in BeforeAll script" }
+        ]
+      }
+    },
+    {
+      "test": "Validate Before Script",
+      "beforeScript": "scripts/beforeScript.js",
+      "response": {
+        "status": 201,
+        "fields": [
+          { "path": "$.title", "value": "Using Default Body from Configs updated in Before script" }
+        ]
+      }
+    }
+  ]
+}

@@ -13,16 +13,14 @@ const ensureDirectoryPath = filePath => {
 
 const getJsFiles = (dir, result = []) => {
   fs.readdirSync(dir).forEach(file => {
-    const name = path.parse(file).name;
     const filePath = path.resolve(dir, file);
-    const fileStats = { name, path: filePath };
 
     if (fs.statSync(filePath).isDirectory()) {
       return getJsFiles(filePath, result);
     }
 
     if (file.indexOf(".js") > 0) {
-      result.push(fileStats);
+      result.push(filePath);
     }
   });
 

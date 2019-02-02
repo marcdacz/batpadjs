@@ -1,3 +1,6 @@
 module.exports = async (scenario) => {
-  console.log('Yay! Im in before each...');
+  scenario.request.fields.push({
+    path: "$.title",
+    value: "Using Default Body from Configs updated in BeforeEach script"
+  });
 };
