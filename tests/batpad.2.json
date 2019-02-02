@@ -11,7 +11,7 @@
     },
     "defaultBodyPath": "./data/body.json",
     "asyncLimit": 1,
-    "delay": 2000,
+    "delay": 0,
     "beforeAllScript": "scripts/beforeAllScript.js",
     "beforeEachScript": "scripts/beforeEachScript.js",
     "afterAllScript": "scripts/afterAllScript.js"

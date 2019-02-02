@@ -3,8 +3,34 @@ const Promise = require("bluebird");
 const fs = require("fs");
 const path = require("path");
 const log = require("./logger");
+const fileHelpers = require("./fileHelpers")
 
 const DEFAULT_METHOD = "get";
+const DEFAULT_SETTINGS_FILE = "settings.json";
+const DEFAULT_TESTS_PATH = "tests";
+
+module.exports.runTests = async (settingsFilePath) => {
+  let settingsFile = settingsFilePath || DEFAULT_SETTINGS_FILE;
+  let settings = fileHelpers.requireUncached(settingsFile);
+  let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
+  let testSuites = fileHelpers.getJsFiles(testSuitesPath);
+  let defaultGlobalDelay = settings.delay || 0;  
+  let defaultGlobalAsyncLimit = settings.asyncLimit || 1;  
+
+  await Promise.map(
+    testSuites,
+    testSuite => {
+      let suite = fileHelpers.requireUncached(testSuite.path);
+      if (suite.configs && suite.scenarios) {
+        return new Promise(function(resolve, reject) {
+          setTimeout(() =>
+            resolve(executeSuite(suite)), defaultGlobalDelay);
+        });
+      }
+    },
+    { concurrency: defaultGlobalAsyncLimit }
+  );
+};
 
 const runScript = async (scriptPath, configs) => {
   if (scriptPath) {
@@ -17,11 +43,12 @@ const runScript = async (scriptPath, configs) => {
   }
 };
 
-module.exports.runTests = async testSuite => {
+const executeSuite = async testSuite => {
   const configs = testSuite.configs;
   const scenarios = testSuite.scenarios;
-  
-  log.success(testSuite.name);  
+  let defaultDelay = configs.delay || 0;
+
+  log.success(testSuite.name);
 
   // --- BEFORE ALL SCRIPT ---
   runScript(configs.beforeAllScript, configs);
@@ -31,15 +58,15 @@ module.exports.runTests = async testSuite => {
     scenarios,
     scenario => {
       return new Promise(function(resolve, reject) {
-        setTimeout(() => resolve(executeScenario(scenario, configs)), configs.delay);
+        setTimeout(() => resolve(executeScenario(scenario, configs)), defaultDelay);
       });
     },
     { concurrency: configs.asyncLimit }
   );
-    
+
   // --- AFTER ALL SCRIPT ---
   runScript(configs.afterAllScript, configs);
-};
+}
 
 const executeScenario = async (scenario, configs) => {
   scenario.request = scenario.request ? scenario.request : {};
@@ -60,7 +87,7 @@ const executeScenario = async (scenario, configs) => {
       url: configs.baseUrl + configs.defaultEndpoint,
       data: scenario.request.body
     });
-    scenario.actualResponse = res;    
+    scenario.actualResponse = res;
   } catch (error) {
     log.error("Response error: " + error);
   }

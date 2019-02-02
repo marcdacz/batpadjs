@@ -1,8 +1,10 @@
 {
   "paths": {    
-    "data": "/data",
-    "reports": "/reports",
-    "scripts": "/scripts",
-    "tests": "/tests"
-  }
+    "data": "data",
+    "reports": "reports",
+    "scripts": "scripts",
+    "tests": "tests"
+  },
+  "asyncLimit": 1,
+  "delay": 0
 }
