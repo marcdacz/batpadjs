@@ -5,7 +5,7 @@
   },
   "scenarios": [    
     {
-      "test": "Validate GET Method",
+      "test": "Validate GET Method ",
       "request": {
         "url": "/users/1/albums",
         "method": "get"

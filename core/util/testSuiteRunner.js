@@ -8,15 +8,19 @@ const fileHelpers = require("./fileHelpers")
 const DEFAULT_METHOD = "get";
 const DEFAULT_SETTINGS_FILE = "settings.json";
 const DEFAULT_TESTS_PATH = "tests";
+const DEFAULT_TESTS_FILTER = "^((?!\@ignore).)*$";
+const DEFAULT_DELAY = 0;
+const DEFAULT_ASYNC_LIMIT = 1;
+
 
 module.exports.runTests = async (settingsFilePath, filter) => {
-  let testFilter = filter || "";
+  let testFilter = filter || DEFAULT_TESTS_FILTER;
   let settingsFile = settingsFilePath || DEFAULT_SETTINGS_FILE;
   let settings = fileHelpers.requireUncached(settingsFile);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
   let testSuites = fileHelpers.getJsFiles(testSuitesPath);
-  let defaultGlobalDelay = settings.delay || 0;
-  let defaultGlobalAsyncLimit = settings.asyncLimit || 1;
+  let defaultGlobalDelay = settings.delay || DEFAULT_DELAY;
+  let defaultGlobalAsyncLimit = settings.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   await Promise.map(
     testSuites,
@@ -52,8 +56,8 @@ const executeSuite = async (testSuite, testFilter) => {
   const configs = testSuite.configs;
   const scenarios = testSuite.scenarios.filter(scenario => scenario.test.match(testFilter));
 
-  let defaultDelay = configs.delay || 0;
-  let defaultAsyncLimit = configs.asyncLimit || 1;
+  let defaultDelay = configs.delay || DEFAULT_DELAY;
+  let defaultAsyncLimit = configs.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (scenarios.length > 0) {
     log.info(testSuite.name);

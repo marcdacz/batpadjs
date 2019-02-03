@@ -9,7 +9,7 @@ module.exports = {
       request: {
         url: "/posts",
         method: "post",
-        body: require("../data/bodyFromFile.json")
+        bodyPath: "data/bodyFromFile.json"
       },
       response: {
         status: 201,
