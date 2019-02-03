@@ -1,5 +1,5 @@
 {
-  "name": "BatPadJS",
+  "name": "batpadjs",
   "version": "1.0.0",
   "description": "Declarative Specification-based API Test Automation Framework",
   "main": "index.js",
@@ -24,7 +24,8 @@
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
-    "jsonpath": "^1.0.0"
+    "jsonpath": "^1.0.0",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

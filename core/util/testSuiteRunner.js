@@ -9,7 +9,8 @@ const DEFAULT_METHOD = "get";
 const DEFAULT_SETTINGS_FILE = "settings.json";
 const DEFAULT_TESTS_PATH = "tests";
 
-module.exports.runTests = async (settingsFilePath) => {
+module.exports.runTests = async (settingsFilePath, filter) => {
+  let testFilter = filter || "";
   let settingsFile = settingsFilePath || DEFAULT_SETTINGS_FILE;
   let settings = fileHelpers.requireUncached(settingsFile);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
