@@ -25,7 +25,7 @@ module.exports.runTests = async (settingsFilePath, filter) => {
       if (suite.configs && suite.scenarios) {
         return new Promise(function(resolve, reject) {
           setTimeout(() =>
-            resolve(executeSuite(suite)), defaultGlobalDelay);
+            resolve(executeSuite(suite, testFilter)), defaultGlobalDelay);
         });
       }
     },
@@ -41,37 +41,40 @@ const runScript = async (scriptPath, testObject) => {
         await require(scriptResolvedPath)(testObject);
       } catch (error) {
         log.error(`ERROR: ${error}`);
-      }      
+      }
     } else {
       log.warn(`WARNING: Script not found: ${scriptPath}`);
     }
   }
 };
 
-const executeSuite = async testSuite => {
+const executeSuite = async (testSuite, testFilter) => {
   const configs = testSuite.configs;
-  const scenarios = testSuite.scenarios;
+  const scenarios = testSuite.scenarios.filter(scenario => scenario.test.match(testFilter));
+
   let defaultDelay = configs.delay || 0;
   let defaultAsyncLimit = configs.asyncLimit || 1;
 
-  log.info(testSuite.name);
+  if (scenarios.length > 0) {
+    log.info(testSuite.name);
 
-  // --- BEFORE ALL SCRIPT ---
-  runScript(configs.beforeAllScript, configs);
+    // --- BEFORE ALL SCRIPT ---
+    runScript(configs.beforeAllScript, configs);
 
-  // --- EXECUTE SCENARIO ---
-  await Promise.map(
-    scenarios,
-    scenario => {
-      return new Promise(function(resolve, reject) {
-        setTimeout(() => resolve(executeScenario(scenario, configs)), defaultDelay);
-      });
-    },
-    { concurrency: defaultAsyncLimit }
-  );
+    // --- EXECUTE SCENARIO ---
+    await Promise.map(
+      scenarios,
+      scenario => {
+        return new Promise(function(resolve, reject) {
+          setTimeout(() => resolve(executeScenario(scenario, configs)), defaultDelay);
+        });
+      },
+      { concurrency: defaultAsyncLimit }
+    );
 
-  // --- AFTER ALL SCRIPT ---
-  runScript(configs.afterAllScript, configs);
+    // --- AFTER ALL SCRIPT ---
+    runScript(configs.afterAllScript, configs);
+  }
 }
 
 const executeScenario = async (scenario, configs) => {
@@ -79,7 +82,7 @@ const executeScenario = async (scenario, configs) => {
   scenario.request.fields = scenario.request.fields ? scenario.request.fields : [];
   scenario.result = {};
   scenario.result.context = [];
-  
+
   // --- BEFORE SCRIPT ---
   runScript(configs.beforeEachScript, scenario);
   runScript(scenario.beforeScript, scenario);
