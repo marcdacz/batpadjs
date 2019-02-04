@@ -1,2 +1,2 @@
 # WicketKeeper
-Declarative Specification-based API Test Automation Framework
+Catch issues on your backend, easy-peasy
