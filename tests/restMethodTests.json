@@ -1,5 +1,5 @@
 {
-  "name": "BatPadJS Tests: REST Method Tests",
+  "name": "REST Method Tests",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com"  
   },

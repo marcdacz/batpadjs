@@ -28,7 +28,7 @@ switch (commandToRun) {
     console.log('Report');
     break;  
   case "version":
-    console.log(`BatPadJS v${version}`);
+    console.log(`WicketKeeper v${version}`);
     break;
   case "help":
   default:

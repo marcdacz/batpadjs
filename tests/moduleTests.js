@@ -1,5 +1,5 @@
 module.exports = {
-  name: "BatPadJS Tests: Module Test",
+  name: "Module Test",
   configs: {
     baseUrl: "https://jsonplaceholder.typicode.com"
   },

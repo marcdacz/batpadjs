@@ -4,7 +4,7 @@
   "description": "Catch issues on your backend, easy-peasy.",
   "main": "index.js",
   "bin": {
-    "batpad": "./cli/index.js"
+    "wck": "./cli/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

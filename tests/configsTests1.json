@@ -1,5 +1,5 @@
 {
-  "name": "BatPadJS Tests: Configs Tests 1",
+  "name": "Configs Tests 1",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
     "defaultEndpoint": "/posts",
