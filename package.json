@@ -1,7 +1,7 @@
 {
-  "name": "batpadjs",
+  "name": "wicketkeeper",
   "version": "1.0.0",
-  "description": "Declarative Specification-based API Test Automation Framework",
+  "description": "Catch issues on your backend, easy-peasy.",
   "main": "index.js",
   "bin": {
     "batpad": "./cli/index.js"
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marcdacz/BatPadJS.git"
+    "url": "git+https://github.com/marcdacz/WicketKeeper.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/marcdacz/BatPadJS/issues"
+    "url": "https://github.com/marcdacz/WicketKeeper/issues"
   },
-  "homepage": "https://github.com/marcdacz/BatPadJS#readme",
+  "homepage": "https://github.com/marcdacz/WicketKeeper#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "bluebird": "^3.5.3",
