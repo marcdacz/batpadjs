@@ -1,2 +1,2 @@
 # WicketKeeper
-Catch issues on your backend, easy-peasy
+Stop the API issues that the batsman misses
