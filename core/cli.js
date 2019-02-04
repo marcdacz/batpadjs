@@ -22,7 +22,7 @@ switch (commandToRun) {
     console.log('Initialise');
     break;
   case "test":
-    require("../core/util/testSuiteRunner").runTests(args.s, args.f);
+    require("./testSuiteRunner").runTests(args.s, args.f);
     break;
   case "report":
     console.log('Report');

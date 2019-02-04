@@ -2,9 +2,9 @@
   "name": "wicketkeeper",
   "version": "1.0.0",
   "description": "Catch issues on your backend, easy-peasy.",
-  "main": "index.js",
+  "main": "./core/index.js",
   "bin": {
-    "wck": "./cli/index.js"
+    "wicketkeeper": "./core/cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
