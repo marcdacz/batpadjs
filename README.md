@@ -1,2 +1,2 @@
 # BatPadJS
-Stop the API issues that the batsman misses
+A simple framework for testing REST APIs which generates dynamic JSON request body.
