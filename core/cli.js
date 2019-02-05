@@ -14,25 +14,25 @@ if (args.init) {
 } else if (args.v) {
   commandToRun = "version";
 } else {
-  commandToRun = "help";
+  commandToRun = "test";
 }
 
 switch (commandToRun) {
   case "init":
     console.log('Initialise');
     break;
-  case "test":
-    require("./testSuiteRunner").runTests(args.s, args.f);
-    break;
   case "report":
     console.log('Report');
-    break;  
+    break;
   case "version":
     console.log(`BatPadJS v${version}`);
     break;
   case "help":
+    console.log("Help");
+    break;
+  case "test":
   default:
-    console.log("Help");    
+    require("./testSuiteRunner").runTests(args.s, args.f);
     break;
 }
 

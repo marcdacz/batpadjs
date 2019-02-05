@@ -21,18 +21,36 @@ module.exports = async (scenario, configs) => {
       }
     }
 
+    if (expectedResponse.statusText) {
+      if (actualResponse.statusText != expectedResponse.statusText) {
+        isFailed = true;
+        scenario.result.context.push({
+          error: "Response status text is incorrect!",
+          actual: actualResponse.statusText,
+          expected: expectedResponse.statusText
+        });
+      }
+    }
+
     if (expectedResponse.fields) {
       for (const field of expectedResponse.fields) {
-        let actualValue = jsonpath.value(actualResponse.data, field.path);
-        let expectedValue = field.value;
-        if (actualValue != expectedValue) {
+        if (actualResponse.data && actualResponse.data.constructor === {}) {          
+          let actualValue = jsonpath.value(actualResponse.data, field.path);
+          let expectedValue = field.value;
+          if (actualValue != expectedValue) {
+            isFailed = true;
+            scenario.result.context.push({
+              error: "Field value is incorrect!",
+              actual: actualValue,
+              expected: expectedValue
+            });
+          }
+        } else {
           isFailed = true;
           scenario.result.context.push({
-            error: "Field value is incorrect!",
-            actual: actualValue,
-            expected: expectedValue
+            error: "Field not found!"
           });
-        }
+        }        
       }
     }
   } else {

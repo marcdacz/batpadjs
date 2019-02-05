@@ -112,7 +112,9 @@ const executeScenario = async (scenario, configs) => {
     });
     scenario.actualResponse = res;
   } catch (error) {
-    log.error("Response error: " + error);
+    if (error.response) {
+      scenario.actualResponse = error.response;      
+    }
   }
 
   // --- RESPONSE SCRIPT ---
