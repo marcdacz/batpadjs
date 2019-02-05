@@ -101,6 +101,7 @@ const executeScenario = async (scenario, configs) => {
       url: url,
       method: scenario.request.method || configs.defaultMethod || DEFAULT_METHOD,
       headers: scenario.headers,
+      params: scenario.params,
       data: scenario.request.body,
       timeout: configs.timeout,
       withCredentials: scenario.withCredentials,
