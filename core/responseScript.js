@@ -6,8 +6,8 @@ module.exports = async (scenario, configs) => {
   scenario.result.state = 'passed';  
   isFailed = false;
   
-  if (scenario.response && scenario.actualResponse) {
-    let expectedResponse = scenario.response;
+  if (scenario.expected && scenario.actualResponse) {
+    let expectedResponse = scenario.expected;
     let actualResponse = scenario.actualResponse;
 
     if (expectedResponse.status) {
@@ -32,11 +32,11 @@ module.exports = async (scenario, configs) => {
       }
     }
 
-    if (expectedResponse.fields) {
-      for (const field of expectedResponse.fields) {
-        if (actualResponse.data && actualResponse.data.constructor === {}) {          
-          let actualValue = jsonpath.value(actualResponse.data, field.path);
-          let expectedValue = field.value;
+    if (expectedResponse.data) {
+      for (const dataField of expectedResponse.data) {
+        if (actualResponse.data) {          
+          let actualValue = jsonpath.value(actualResponse.data, dataField.path);
+          let expectedValue = dataField.value;
           if (actualValue != expectedValue) {
             isFailed = true;
             scenario.result.context.push({

@@ -14,9 +14,9 @@
   "scenarios": [
     {
       "test": "Validate BeforeAll Script",
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Using Default Body from Configs updated in BeforeAll script" }
         ]
       }
@@ -24,9 +24,9 @@
     {
       "test": "Validate Before Script",
       "beforeScript": "scripts/beforeScript.js",
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Using Default Body from Configs updated in Before script" }
         ]
       }

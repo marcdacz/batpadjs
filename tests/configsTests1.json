@@ -16,9 +16,9 @@
           "body": "This test uses the default method and endpoint"
         }
       },
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Using default method and endpoint" },
           { "path": "$.body", "value": "This test uses the default method and endpoint" }
         ]
@@ -37,9 +37,9 @@
           { "path": "$.body", "value": "This test will verify updating json fields" }
         ]
       },
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Updating Scenario Body Fields" },
           { "path": "$.body", "value": "This test will verify updating json fields" }
         ]
@@ -51,9 +51,9 @@
         "url": "/posts/1",
         "method": "get"
       },
-      "response": {
+      "expected": {
         "status": 200,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" },
           { "path": "$.body", "value": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto" }
         ]
@@ -61,9 +61,9 @@
     }, 
     {
       "test": "Validate Posting Default Body Path",
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "This is a title from a file" },
           { "path": "$.body", "value": "This is a body from a file" }
         ]
@@ -77,9 +77,9 @@
           { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
         ]
       },
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Updating Default Body from File" },
           { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
         ]

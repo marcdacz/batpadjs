@@ -11,9 +11,9 @@ module.exports = {
         method: "post",
         bodyPath: "data/bodyFromFile.json"
       },
-      response: {
+      expected: {
         status: 201,
-        fields: [
+        data: [
           { path: "$.title", value: "This is a title from a file" }
         ]
       }

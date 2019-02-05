@@ -14,9 +14,9 @@
   "scenarios": [    
     {
       "test": "Validate BeforeEach Script",
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Using Default Body from Configs updated in BeforeEach script" }
         ]
       }

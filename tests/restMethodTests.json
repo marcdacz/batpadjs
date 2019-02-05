@@ -10,9 +10,9 @@
         "url": "/users/1/albums",
         "method": "get"
       },
-      "response": {
+      "expected": {
         "status": 200,
-        "fields": [
+        "data": [
           { "path": "$[0].title", "value": "quidem molestiae enim" }
         ]
       }
@@ -27,9 +27,9 @@
           "body": "This test verifies the post method"
         }
       },
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Testing Post Method" }
         ]
       }
@@ -46,9 +46,9 @@
           "body": "This test verifies the put method"
         }
       },
-      "response": {
+      "expected": {
         "status": 200,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Testing Put Method" }
         ]
       }
@@ -63,9 +63,9 @@
           "body": "This test verifies the patch method"
         }
       },
-      "response": {
+      "expected": {
         "status": 200,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Testing Patch Method" }
         ]
       }
@@ -76,7 +76,7 @@
         "url": "/posts/1",
         "method": "delete"
       },
-      "response": {
+      "expected": {
         "status": 200
       }
     }

@@ -20,7 +20,7 @@ const scenarioGenerator = () => {
           Accept: 'application/json'
         }
       },
-      response: {
+      expected: {
         status: combo.status,       
         statusText: combo.statusText,       
       }

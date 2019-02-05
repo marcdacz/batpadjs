@@ -13,9 +13,9 @@
   "scenarios": [
     {
       "test": "Validate Using Default Body from Configs",      
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Using Default Body from Configs" },
           { "path": "$.body", "value": "This test uses default body from test suite configs" }
         ]
@@ -29,9 +29,9 @@
           { "path": "$.body", "value": "This test will verify updating json fields" }
         ]
       },
-      "response": {
+      "expected": {
         "status": 201,
-        "fields": [
+        "data": [
           { "path": "$.title", "value": "Updating Configs Body Fields" },
           { "path": "$.body", "value": "This test will verify updating json fields" }
         ]
