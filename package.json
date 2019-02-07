@@ -4,7 +4,7 @@
   "description": "Catch issues on your backend, easy-peasy.",
   "main": "./core/index.js",
   "bin": {
-    "batpad": "./core/cli.js"
+    "batpad": "./cli/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,6 +25,7 @@
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
     "jsonpath": "^1.0.0",
+    "shelljs": "^0.8.3",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
