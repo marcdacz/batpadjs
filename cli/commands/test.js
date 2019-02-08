@@ -1,12 +1,14 @@
-exports.command = 'test'
+const { resolve } = require('path');
+
+exports.command = 'test [settings] [filter]'
 exports.aliases = ['t']
 exports.nargs = 1
 exports.desc = 'Execute batpad tests'
 exports.builder = {
-  filter: {
-    demand: true
+  settings: {
+    default: 'settings.json'
   }
 }
 exports.handler = function (argv) {
-  console.log('test called', argv.filter)
+  require(resolve('./core/testRunner')).runTests(argv.settings, argv.filter)
 }
