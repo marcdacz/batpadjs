@@ -1,14 +1,10 @@
-const { resolve } = require('path');
+const { join, resolve } = require('path');
 
 exports.command = 'test [settings] [filter]'
 exports.aliases = ['t']
 exports.nargs = 1
 exports.desc = 'Execute batpad tests'
-exports.builder = {
-  settings: {
-    default: 'settings.json'
-  }
-}
-exports.handler = function (argv) {
-  require(resolve('./core/testRunner')).runTests(argv.settings, argv.filter)
+exports.builder = {}
+exports.handler = (argv) => {
+  require(join(__dirname, '../../core/testRunner')).runTests(argv.filter)
 }
