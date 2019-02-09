@@ -1,2 +1,2 @@
 # BatPadJS
-A simple framework for testing REST APIs which generates dynamic JSON request body.
+Declarative Specification-based API Test Automation Framework
