@@ -1,4 +1,4 @@
-const { join, resolve } = require('path');
+const { join } = require('path');
 
 exports.command = 'test [settings] [filter]'
 exports.aliases = ['t']

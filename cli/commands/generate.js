@@ -4,4 +4,5 @@ exports.description = 'Generate batpad files'
 exports.builder = function (yargs) {
   return yargs.commandDir('gen_cmds')
 }
-exports.handler = function (argv) {}
+exports.handler = function (argv) {
+}

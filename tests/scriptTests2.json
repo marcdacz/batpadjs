@@ -1,5 +1,5 @@
 {
-  "name": "Scripts Tests 1",
+  "name": "Scripts Tests 2",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
     "defaultEndpoint": "/posts",

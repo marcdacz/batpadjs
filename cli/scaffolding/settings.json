@@ -5,6 +5,11 @@
     "scripts": "scripts",
     "tests": "tests"
   },
+  "environments": {
+    "dev": "<DEV Environment URL>",
+    "test": "<TEST Environment URL>",
+    "preprod": "<PREPRO Environment URL>"
+  },
   "asyncLimit": 1,
   "delay": 0
 }

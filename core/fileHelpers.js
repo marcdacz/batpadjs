@@ -27,7 +27,7 @@ const getJsFiles = (dir, result = []) => {
   return result;
 };
 
-const requireUncached = filePath => {
+const requireUncached = filePath => {  
   if (filePath) {
     let resolvedPath = path.resolve(filePath);
     if (fs.existsSync(resolvedPath)) {
