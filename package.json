@@ -1,20 +1,19 @@
 {
   "name": "batpadjs",
   "version": "1.0.0",
-  "description": "Catch issues on your backend, easy-peasy.",
+  "description": "Declarative Specification-based API Test Automation Framework",
   "main": "./core/index.js",
   "bin": {
     "batpad": "./cli/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "batpad-test": "node ./batpad.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcdacz/BatPadJS.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "marcDacz",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/marcdacz/BatPadJS/issues"

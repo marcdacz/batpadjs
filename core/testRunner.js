@@ -13,8 +13,9 @@ const DEFAULT_DELAY = 0;
 const DEFAULT_ASYNC_LIMIT = 1;
 
 
-module.exports.runTests = async (filter) => {
-  let testFilter = filter || DEFAULT_TESTS_FILTER;
+module.exports.runTests = async (opts) => {
+  opts = opts ? opts : {};
+  let testFilter = opts.filter || DEFAULT_TESTS_FILTER;
   let settingsFile = DEFAULT_SETTINGS_FILE;
   let settings = fileHelpers.requireUncached(settingsFile);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
