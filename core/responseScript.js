@@ -2,13 +2,12 @@ const jsonpath = require("jsonpath");
 const log = require("./logger");
 let isFailed;
 
-module.exports = async (scenario, configs) => {  
+module.exports = async (scenario, actualResponse, configs) => {  
   scenario.result.state = 'passed';  
   isFailed = false;
   
-  if (scenario.expected && scenario.actualResponse) {
-    let expectedResponse = scenario.expected;
-    let actualResponse = scenario.actualResponse;
+  if (scenario.expected && actualResponse) {
+    let expectedResponse = scenario.expected;   
 
     if (expectedResponse.status) {
       if (actualResponse.status != expectedResponse.status) {
@@ -41,6 +40,7 @@ module.exports = async (scenario, configs) => {
             isFailed = true;
             scenario.result.context.push({
               error: "Field value is incorrect!",
+              path: dataField.path,
               actual: actualValue,
               expected: expectedValue
             });
@@ -60,13 +60,6 @@ module.exports = async (scenario, configs) => {
     });
   }
 
-  if (isFailed) {
-    scenario.result.state = 'failed';    
-    scenario.result.context.map(context => {
-      log.error(` ${JSON.stringify(context)}`);
-    })
-    log.error(` \u2715 ${scenario.test}`);
-  } else {
-    log.success(` \u2713 ${scenario.test}`);
-  }
+  
+  return isFailed;
 };

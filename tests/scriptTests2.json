@@ -13,7 +13,7 @@
   },
   "scenarios": [    
     {
-      "test": "Validate BeforeEach Script",
+      "test": "BeforeEach Script",
       "expected": {
         "status": 201,
         "data": [

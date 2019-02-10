@@ -1,4 +1,4 @@
-require('./core/index.js')
+require('./')
   .test({
     filter: 'Before'
   });

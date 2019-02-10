@@ -5,7 +5,7 @@
   },
   "scenarios": [    
     {
-      "test": "Validate GET Method ",
+      "test": "GET Method ",
       "request": {
         "url": "/users/1/albums",
         "method": "get"
@@ -18,7 +18,7 @@
       }
     },
     {
-      "test": "Validate POST Method",
+      "test": "POST Method",
       "request": {
         "url": "/posts",
         "method": "post",
@@ -35,7 +35,7 @@
       }
     },
     {
-      "test": "Validate PUT Method",
+      "test": "PUT Method",
       "request": {
         "url": "/posts/1",
         "method": "put",
@@ -54,7 +54,7 @@
       }
     },
     {
-      "test": "Validate PATCH Method",
+      "test": "PATCH Method",
       "request": {
         "url": "/posts/1",
         "method": "patch",
@@ -71,7 +71,7 @@
       }
     },
     {
-      "test": "Validate DELETE Method",
+      "test": "DELETE Method",
       "request": {
         "url": "/posts/1",
         "method": "delete"

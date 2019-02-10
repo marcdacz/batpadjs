@@ -12,7 +12,7 @@
   },
   "scenarios": [
     {
-      "test": "Validate Using Default Body from Configs",      
+      "test": "Using Default Body from Configs",      
       "expected": {
         "status": 201,
         "data": [
@@ -22,7 +22,7 @@
       }
     },
     {
-      "test": "Validate Updating Fields of Body from Configs",      
+      "test": "Updating Fields of Body from Configs",      
       "request": {
         "fields": [
           { "path": "$.title", "value": "Updating Configs Body Fields" },

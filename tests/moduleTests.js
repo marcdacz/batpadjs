@@ -5,7 +5,7 @@ module.exports = {
   },
   scenarios: [
     {
-      test: "Validate JS Module as a Test",
+      test: "JS Module as a Test",
       request: {
         url: "/posts",
         method: "post",

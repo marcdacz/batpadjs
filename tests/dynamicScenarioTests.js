@@ -12,7 +12,7 @@ const scenarioGenerator = () => {
   let scenarios = [];
   testCombos.map(combo => {
     scenarios.push({
-      test: `Validate Status: ${combo.status}`,
+      test: `Status: ${combo.status}`,
       request: {
         url: `/${combo.status}`,
         method: "get",

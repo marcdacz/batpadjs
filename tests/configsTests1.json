@@ -8,7 +8,7 @@
   },
   "scenarios": [
     {
-      "test": "Validate Using Default Method and Endpoint",      
+      "test": "Using Default Method and Endpoint",      
       "request": {
         "body": {
           "id": 12345,
@@ -25,7 +25,7 @@
       }
     }, 
     {
-      "test": "Validate Updating Fields from Scenario Body",      
+      "test": "Updating Fields from Scenario Body",      
       "request": {
         "body": {
           "id": 12345,
@@ -46,7 +46,7 @@
       }
     },    
     {
-      "test": "Validate Using Scenario Method and Endpoint",      
+      "test": "Using Scenario Method and Endpoint",      
       "request": {
         "url": "/posts/1",
         "method": "get"
@@ -60,7 +60,7 @@
       }
     }, 
     {
-      "test": "Validate Posting Default Body Path",
+      "test": "Posting Default Body Path",
       "expected": {
         "status": 201,
         "data": [
@@ -70,7 +70,7 @@
       }
     },
     {
-      "test": "Validate Updating Json Fields from Default Body Path",
+      "test": "Updating Json Fields from Default Body Path",
       "request": {
         "fields": [
           { "path": "$.title", "value": "Updating Default Body from File" },
