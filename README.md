@@ -34,18 +34,53 @@ batpad test --filter SomeText
 ```
 batpad gen testsuite --name SomeName
 ```
-4. Generate Before/After All Test Scripts which when set, will run before all the test scenarios in the test suite and has access to configuration data
+4. Generate Before/After All Test Scripts which when set, will run before/after all the test scenarios in the test suite and have access to configuration data
 ```
 batpad gen beforeallscript --name SomeName
 batpad gen afterallscript --name SomeName
 ```
-5. Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before the test scenario. It has access to scenario data
+5. Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before/after the test scenario. Both have access to scenario data but after scripts have access to actual API response data
 ```
 batpad gen beforescript --name SomeName
 batpad gen aftercript --name SomeName
 ```
 
 ### Test Anatomy
+```
+{
+  "name": "Sample BatPadJS Test Suite",
+  "configs": {
+    "baseUrl": "https://jsonplaceholder.typicode.com",
+    "defaultEndpoint": "/posts",
+    "defaultMethod": "post",  
+    "defaultBody": {
+      "id": 123456,
+      "title": "Using Default Body from Configs",
+      "body": "This test uses default body from test suite configs"
+    }, 
+    "beforeAllScript": "scripts/beforeAllScript.js"
+  },
+  "scenarios": [
+    {
+      "test": "Sample @smoke test scenario",
+      "request": {
+        "url": "/posts",
+        "method": "post",
+        "bodyPath": "data/bodyFromFile.json"
+      },
+      "expected": {
+        "status": 201,
+        "data": [
+          { "path": "$.title", "equals": "Using Default Body Title from Configs updated in BeforeAll script" },
+          { "path": "$.body", "contains": "BeforeAll" },
+          { "path": "$.body", "notcontains": "test suite" }
+        ]
+      }
+    }
+  ]
+}
+
+```
 
 __**Configuration**__
 
