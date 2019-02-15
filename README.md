@@ -39,7 +39,7 @@ batpad gen testsuite --name SomeName
 batpad gen beforeallscript --name SomeName
 batpad gen afterallscript --name SomeName
 ```
-5. Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before the test scenario has access to scenario data
+5. Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before the test scenario. It has access to scenario data
 ```
 batpad gen beforescript --name SomeName
 batpad gen aftercript --name SomeName
