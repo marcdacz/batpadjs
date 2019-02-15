@@ -7,27 +7,33 @@ const ensureDirectoryPath = filePath => {
   if (fs.existsSync(dirname)) {
     return true;
   }
+  console.log('NOT FOUND');
+
   ensureDirectoryPath(dirname);
   fs.mkdirSync(dirname);
 };
 
 const getJsFiles = (dir, result = []) => {
-  fs.readdirSync(dir).forEach(file => {
-    const filePath = path.resolve(dir, file);
+  if (fs.existsSync(dir)) {
+    fs.readdirSync(dir).forEach(file => {
+      const filePath = path.resolve(dir, file);
 
-    if (fs.statSync(filePath).isDirectory()) {
-      return getJsFiles(filePath, result);
-    }
+      if (fs.statSync(filePath).isDirectory()) {
+        return getJsFiles(filePath, result);
+      }
 
-    if (file.indexOf(".js") > 0) {
-      result.push(filePath);
-    }
-  });
+      if (file.indexOf(".js") > 0) {
+        result.push(filePath);
+      }
+    });
 
-  return result;
+    return result;
+  } else {
+    log.warn(`WARNING: Directory does not exists: ${dir}`);
+  }
 };
 
-const requireUncached = filePath => {  
+const requireUncached = filePath => {
   if (filePath) {
     let resolvedPath = path.resolve(filePath);
     if (fs.existsSync(resolvedPath)) {

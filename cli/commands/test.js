@@ -7,7 +7,7 @@ exports.desc = 'Execute batpad tests'
 exports.builder = {}
 exports.handler = (argv) => {
   let opts = {};
-  if (argv.filter) {
+  if (argv.filter && argv.filter.length > 0) {
     opts.filter = argv.filter;
   }
   require(join(__dirname, '../../core/testRunner')).runTests(opts);
