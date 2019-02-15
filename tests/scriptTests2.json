@@ -17,7 +17,7 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Using Default Body from Configs updated in BeforeEach script" }
+          { "path": "$.title", "contains": "BeforeEach" }
         ]
       }
     }

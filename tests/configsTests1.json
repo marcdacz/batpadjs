@@ -19,8 +19,8 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Using default method and endpoint" },
-          { "path": "$.body", "value": "This test uses the default method and endpoint" }
+          { "path": "$.title", "equals": "Using default method and endpoint" },
+          { "path": "$.body", "equals": "This test uses the default method and endpoint" }
         ]
       }
     }, 
@@ -40,8 +40,8 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Updating Scenario Body Fields" },
-          { "path": "$.body", "value": "This test will verify updating json fields" }
+          { "path": "$.title", "equals": "Updating Scenario Body Fields" },
+          { "path": "$.body", "equals": "This test will verify updating json fields" }
         ]
       }
     },    
@@ -54,8 +54,8 @@
       "expected": {
         "status": 200,
         "data": [
-          { "path": "$.title", "value": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" },
-          { "path": "$.body", "value": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto" }
+          { "path": "$.title", "equals": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit" },
+          { "path": "$.body", "equals": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto" }
         ]
       }
     }, 
@@ -64,8 +64,8 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "This is a title from a file" },
-          { "path": "$.body", "value": "This is a body from a file" }
+          { "path": "$.title", "equals": "This is a title from a file" },
+          { "path": "$.body", "equals": "This is a body from a file" }
         ]
       }
     },
@@ -80,8 +80,8 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Updating Default Body from File" },
-          { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
+          { "path": "$.title", "equals": "Updating Default Body from File" },
+          { "path": "$.body", "equals": "This test will verify updating json fields from the default one" }
         ]
       }
     }

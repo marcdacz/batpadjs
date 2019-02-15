@@ -17,7 +17,9 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Using Default Body from Configs updated in BeforeAll script" }
+          { "path": "$.title", "equals": "Using Default Body Title from Configs updated in BeforeAll script" },
+          { "path": "$.body", "contains": "BeforeAll" },
+          { "path": "$.body", "notcontains": "test suite" }
         ]
       }
     },
@@ -27,7 +29,7 @@
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "value": "Using Default Body from Configs updated in Before script" }
+          { "path": "$.title", "equals": "Using Default Body from Configs updated in Before script" }
         ]
       }
     }
