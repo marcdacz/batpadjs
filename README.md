@@ -50,40 +50,40 @@ batpad gen aftercript --name SomeName
 __**Configuration**__
 
 ```
-*baseUrl* - Sets the base url to be used in the test suite
-*defaultEndpoint* - Sets a default endpoint
-*defaultMethod* - Sets the default REST method
-*defaultBody* - Sets the default JSON Body for use in the test scenarios
-*defaultBodyPath* - Sets the default JSON Body File Path for use in the test scenarios
-*beforeAllScript* - Sets the beforeAllScript path inside the scripts folder
-*beforeEachScript* - Sets the beforeEachScript path inside the scrips folder
-*afterEachScript* - Sets the afterEachScript path inside the scripts folder
-*afterAllScript* - Sets the afterAllScript path inside the script folder
+baseUrl - Sets the base url to be used in the test suite
+defaultEndpoint - Sets a default endpoint
+defaultMethod - Sets the default REST method
+defaultBody - Sets the default JSON Body for use in the test scenarios
+defaultBodyPath - Sets the default JSON Body File Path for use in the test scenarios
+beforeAllScript - Sets the beforeAllScript path inside the scripts folder
+beforeEachScript - Sets the beforeEachScript path inside the scrips folder
+afterEachScript - Sets the afterEachScript path inside the scripts folder
+afterAllScript - Sets the afterAllScript path inside the script folder
 ```
 
 __**Scenarios**__
 ```
-*test* - Test Scenario Name or Description
-*request* - Sets the Request Details
-*expected* - Sets the Expected Results
+test - Test Scenario Name or Description
+request - Sets the Request Details
+expected - Sets the Expected Results
 
 ```
 
 __Request__
 ```
-*url* - Sets the endpoint to be used in the scenario
-*method* - Sets the REST method for the scenario. Overrides the defaultMethod from the Configs
-*headers* - Sets the Request Headers
-*params* - Sets the Request Parameters
-*body* - Sets the Request Body JSON
-*bodyPath* - Sets the Request Body JSON File Path. Overrides the defaultBodyPath from the configs
+url - Sets the endpoint to be used in the scenario
+method - Sets the REST method for the scenario. Overrides the defaultMethod from the Configs
+headers - Sets the Request Headers
+params - Sets the Request Parameters
+body - Sets the Request Body JSON
+bodyPath - Sets the Request Body JSON File Path. Overrides the defaultBodyPath from the configs
 ```
 
 __Expected__
 ```
-*status* - Sets the expected status code
-*statusText* - Sets the expected status text
-*data* - Sets the expected data where you specify the JSON path and the Validation Method such as equals, contains or notcontains
+status - Sets the expected status code
+statusText - Sets the expected status text
+data - Sets the expected data where you specify the JSON path and the Validation Method such as equals, contains or notcontains
 ```
 
 ## Built With
@@ -96,7 +96,7 @@ and many more...
 
 ## Authors
 
-* **Marc Dacanay** - *Initial work* - [marcDacz](https://github.com/marcdacz)
+* [Marc Dacanay](https://github.com/marcdacz)
 
 
 ## License
