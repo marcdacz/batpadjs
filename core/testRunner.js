@@ -133,7 +133,7 @@ const executeScenario = async (scenario, configs, reporter) => {
   scenario.request.fields = scenario.request.fields ? scenario.request.fields : [];
   scenario.result = {};
   scenario.result.context = [];
-  scenario.result.state = 'pending';
+  scenario.result.state = 'passed';
   scenario.result.start = moment();
 
   // --- BEFORE SCRIPT ---

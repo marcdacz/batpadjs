@@ -21,11 +21,11 @@ module.exports = class Reporter {
 
   saveTestRunReport() {
     this.test.result.end = moment();
-    this.test.result.duration = timeHelpers.getDuration(this.test.result.start, this.test.result.end);
-    this.test.result.totalSuiteCount = this.test.suites.length;
-    this.test.result.totalTestCount = this.getTotalTests();
+    this.test.result.duration = timeHelpers.getDuration(this.test.result.start, this.test.result.end);    
     this.test.result.totalPassedTestCount = this.getTotalPassedTests();
     this.test.result.totalFailedTestCount = this.getTotalFailedTests();
+    this.test.result.totalTestCount = this.test.result.totalPassedTestCount + this.test.result.totalFailedTestCount;
+    this.test.result.totalSuiteCount = this.test.suites.length;
     this.test.result.passPercentage = (this.test.result.totalPassedTestCount * 100 / this.test.result.totalTestCount).toFixed(2) + '%';
     this.test.result.state = this.test.result.totalFailedTestCount > 0 ? 'failed' : 'passed';
 
@@ -41,14 +41,6 @@ module.exports = class Reporter {
 
   addTest(testSuite) {
     this.test.suites.push(testSuite);
-  }
-
-  getTotalTests() {
-    let count = 0;
-    this.test.suites.map(suite => {
-      count += suite.scenarios.length;
-    });
-    return count;
   }
 
   getTotalFailedTests() {
