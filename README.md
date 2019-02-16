@@ -20,26 +20,25 @@ npm install --save batpadjs
 
 ### CLI Commands
 
-1. Initialise a Project
-
+Initialise a Project
 ```
 batpad init
 ```
-2. Run your Tests
+Run your Tests
 ```
 batpad test
 batpad test --filter SomeText
 ```
-3. Generate Additional Test Suites
+Generate Additional Test Suites
 ```
 batpad gen testsuite --name SomeName
 ```
-4. Generate Before/After All Test Scripts which when set, will run before/after all the test scenarios in the test suite and have access to configuration data
+Generate Before/After All Test Scripts which when set, will run before/after all the test scenarios in the test suite and have access to configuration data
 ```
 batpad gen beforeallscript --name SomeName
 batpad gen afterallscript --name SomeName
 ```
-5. Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before/after the test scenario. Both have access to scenario data but after scripts have access to actual API response data
+Generate Before/BeforeEach/After/AfterEach Test Scripts which when set, will run before/after the test scenario. Both have access to scenario data but after scripts have access to actual API response data
 ```
 batpad gen beforescript --name SomeName
 batpad gen aftercript --name SomeName
