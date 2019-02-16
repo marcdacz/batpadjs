@@ -26,10 +26,17 @@
     {
       "test": "Before Script",
       "beforeScript": "scripts/beforeScript.js",
+      "request": {
+        "fields": [
+          { "path": "$.title", "value": "%TITLEID%" },
+          { "path": "$.body", "value": "This test will verify updating json fields" }
+        ]
+      },
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "equals": "Using Default Body from Configs updated in Before script" }
+          { "path": "$.title", "equals": "%TITLEID%" },
+          { "path": "$.body", "equals": "This test will verify updating json fields" }
         ]
       }
     }

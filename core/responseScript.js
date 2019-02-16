@@ -1,6 +1,21 @@
 const jsonpath = require("jsonpath");
 
 module.exports = async (scenario, actualResponse, configs) => {
+  if (!scenario.expected) {
+    scenario.result.state = 'failed';
+    scenario.result.context.push({
+      error: `No expected results!`
+    });
+    return;
+  }
+
+  if (!actualResponse) {
+    scenario.result.state = 'failed';
+    scenario.result.context.push({
+      error: `Response is undefined!`
+    });
+    return;
+  }
 
   if (scenario.expected && actualResponse) {
     let expectedResponse = scenario.expected;
@@ -13,8 +28,6 @@ module.exports = async (scenario, actualResponse, configs) => {
           actual: actualResponse.status,
           expected: expectedResponse.status
         });
-      } else {
-        scenario.result.state = 'passed';
       }
     }
 
@@ -26,8 +39,6 @@ module.exports = async (scenario, actualResponse, configs) => {
           actual: actualResponse.statusText,
           expected: expectedResponse.statusText
         });
-      } else {
-        scenario.result.state = 'passed';
       }
     }
 
@@ -36,10 +47,11 @@ module.exports = async (scenario, actualResponse, configs) => {
         if (actualResponse.data) {
           let actualValue = jsonpath.value(actualResponse.data, dataField.path);
 
+
           // Equals
           if (dataField.equals) {
             let expectedValue = dataField.equals;
-            if (actualValue != expectedValue) {
+            if (actualValue !== expectedValue) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
                 error: "Field value is incorrect!",
@@ -47,17 +59,13 @@ module.exports = async (scenario, actualResponse, configs) => {
                 actual: actualValue,
                 expected: expectedValue
               });
-            } else {
-              scenario.result.state = 'passed';
             }
           }
 
           // Contains
           if (dataField.contains) {
-            let regex = RegExp(dataField.contains);
-            if (regex.test(actualValue)) {
-              scenario.result.state = 'passed';              
-            } else {
+            let regex = RegExp(dataField.contains, 'i');
+            if (!regex.test(actualValue)) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
                 error: "Field value is incorrect!",
@@ -70,10 +78,8 @@ module.exports = async (scenario, actualResponse, configs) => {
 
           // NotContains
           if (dataField.notcontains) {
-            let regex = RegExp(dataField.notcontains);
-            if (!regex.test(actualValue)) {
-              scenario.result.state = 'passed';              
-            } else {
+            let regex = RegExp(dataField.notcontains, 'i');
+            if (regex.test(actualValue)) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
                 error: "Field value is incorrect!",
@@ -82,6 +88,11 @@ module.exports = async (scenario, actualResponse, configs) => {
                 notcontains: dataField.notcontains
               });
             }
+          }
+
+          // Callback
+          if (dataField.callback) {
+            dataField.callback(dataField.path, actualValue, scenario);
           }
         } else {
           scenario.result.state = 'failed';
@@ -92,10 +103,7 @@ module.exports = async (scenario, actualResponse, configs) => {
       }
     }
 
-  } else {
-    scenario.result.state = 'failed';
-    scenario.result.context.push({
-      error: `Response is undefined!`
-    });
   }
+
+  return;
 };

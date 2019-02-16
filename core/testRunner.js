@@ -23,7 +23,7 @@ module.exports.runTests = async (opts) => {
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
   let testSuites = fileHelpers.getJsFiles(testSuitesPath);
   let defaultGlobalDelay = settings.delay || DEFAULT_DELAY;
-  let defaultGlobalAsyncLimit = settings.asyncLimit || DEFAULT_ASYNC_LIMIT;  
+  let defaultGlobalAsyncLimit = settings.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (testSuites && testSuites.length > 0) {
     let reporter = new Reporter();
@@ -41,39 +41,41 @@ module.exports.runTests = async (opts) => {
       { concurrency: defaultGlobalAsyncLimit }
     );
 
-    // --- SAVE TEST REPORT --- 
+    // --- SAVE TEST REPORT ---  
     reporter.saveTestRunReport();
     displayOverallTestResult(reporter);
   }
 };
 
 const displayOverallTestResult = (reporter) => {
-  log.lines();
-  log.info('------------------------------------------------------------------------------');
-  log.keyValue(`Start:`, `\t\t\t${reporter.test.result.start}`);
-  log.keyValue(`End:`, `\t\t\t${reporter.test.result.end}`);
-  log.keyValue(`Duration:`, `\t\t${reporter.test.result.duration}`);
-  log.keyValue(`Total:`, `\t\t\t${reporter.test.result.totalTestCount}`);
-  log.keyValue(`Passed:`, `\t\t${reporter.test.result.totalPassedTestCount}`);
-  log.keyValue(`Failed:`, `\t\t${reporter.test.result.totalFailedTestCount}`);
-  log.keyValue(`Pass Percentage:`, `\t${reporter.test.result.passPercentage}`);
-  log.info('------------------------------------------------------------------------------');
+  if (reporter.test.result.totalTestCount > 0) {
+    log.lines();
+    log.info('------------------------------------------------------------------------------');
+    log.keyValue(`Start:`, `\t\t\t${reporter.test.result.start}`);
+    log.keyValue(`End:`, `\t\t\t${reporter.test.result.end}`);
+    log.keyValue(`Duration:`, `\t\t${reporter.test.result.duration}`);
+    log.keyValue(`Total:`, `\t\t\t${reporter.test.result.totalTestCount}`);
+    log.keyValue(`Passed:`, `\t\t${reporter.test.result.totalPassedTestCount}`);
+    log.keyValue(`Failed:`, `\t\t${reporter.test.result.totalFailedTestCount}`);
+    log.keyValue(`Pass Percentage:`, `\t${reporter.test.result.passPercentage}`);
+    log.info('------------------------------------------------------------------------------');
 
-  log.lines();
-  if (reporter.test.result.state === 'passed') {
-    log.info('TEST RUN SUCCESSULLY FINISHED! \uD83D\uDE0E')
-  } else if (reporter.test.result.state === 'failed') {
-    log.error('TEST RUN FAILED! \uD83D\uDE22');
-    let count = 1;
-    let failedTests = reporter.getFailedTests();
-    failedTests.map(scenario => {
-      log.error(`\n${count}. ${scenario.test}`);
-      log.warn(`Test Context:`);
-      log.failedTestContext(scenario.result.context);
-      count++;
-    });
+    log.lines();
+    if (reporter.test.result.state === 'passed') {
+      log.info('TEST RUN SUCCESSULLY FINISHED! \uD83D\uDE0E')
+    } else if (reporter.test.result.state === 'failed') {
+      log.error('TEST RUN FAILED! \uD83D\uDE22');
+      let count = 1;
+      let failedTests = reporter.getFailedTests();
+      failedTests.map(scenario => {
+        log.error(`\n${count}. ${scenario.test}`);
+        log.warn(`Test Context:`);
+        log.failedTestContext(scenario.result.context);
+        count++;
+      });
+    }
+    log.lines();
   }
-  log.lines();
 }
 
 const runScript = async (scriptPath, testObject) => {
@@ -93,8 +95,11 @@ const runScript = async (scriptPath, testObject) => {
 
 const executeSuite = async (testSuite, testFilter, reporter) => {
   const configs = testSuite.configs;
-  const scenarios = testSuite.scenarios.filter(scenario => scenario.test.match(testFilter));
-
+  const scenarios = testSuite.scenarios.filter(scenario => {
+    if (scenario.test) {
+      return scenario.test.match(new RegExp(testFilter, 'i'));
+    }
+  });
   let defaultDelay = configs.delay || DEFAULT_DELAY;
   let defaultAsyncLimit = configs.asyncLimit || DEFAULT_ASYNC_LIMIT;
 

@@ -54,7 +54,11 @@ module.exports = class Reporter {
   getTotalFailedTests() {
     let count = 0;
     this.test.suites.map(suite => {
-      count += suite.scenarios.filter(scenario => scenario.result.state === 'failed').length;
+      count += suite.scenarios.filter(scenario => {
+        if (scenario.result) {
+          return scenario.result.state === 'failed'
+        }        
+      }).length;
     });
     return count;
   }
@@ -62,7 +66,11 @@ module.exports = class Reporter {
   getTotalPassedTests() {
     let count = 0;
     this.test.suites.map(suite => {
-      count += suite.scenarios.filter(scenario => scenario.result.state === 'passed').length;
+      count += suite.scenarios.filter(scenario => {
+        if (scenario.result) {
+          return scenario.result.state === 'passed'
+        }        
+      }).length;
     });
     return count;
   }
@@ -71,11 +79,11 @@ module.exports = class Reporter {
     let failedTests = [];
     this.test.suites.map(suite => {
       suite.scenarios.map(scenario => {
-        if (scenario.result.state === 'failed') {
+        if (scenario.result && scenario.result.state === 'failed') {
           failedTests.push(scenario);
         }
       })
-    });    
+    });
     return failedTests;
   }
 }

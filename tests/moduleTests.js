@@ -1,3 +1,5 @@
+const { customValidation } = require('../scripts/customValidation');
+
 module.exports = {
   name: "Module Test",
   configs: {
@@ -14,7 +16,8 @@ module.exports = {
       expected: {
         status: 201,
         data: [
-          { path: "$.title", value: "This is a title from a file" }
+          { path: "$.title", equals: "This is a title from a file" },
+          { path: "$.body", callback: customValidation }
         ]
       }
     }
