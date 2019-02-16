@@ -126,15 +126,17 @@ data - Sets the expected data where you specify the JSON path and the Validation
 * [axios](https://github.com/axios/axios) - HTTP Client used
 * [jsonpath](https://github.com/dchester/jsonpath) - Used to manipulate JSON Data
 * [yargs](https://github.com/yargs/yargs) - Used to create the CLI
-
-and many more...
+* [bluebird](https://github.com/petkaantonov/bluebird) - Promise Library
+* [moment](https://github.com/moment/moment) - Used for Date and Time stuff
+* [chalk](https://github.com/chalk/chalk) - Made the logging colorful
+* [shelljs](https://github.com/shelljs/shelljs) - Cross Environment Shell
 
 ## Authors
 
-* [Marc Dacanay](https://github.com/marcdacz)
+* Marc Dacanay [Github](https://github.com/marcdacz) | [LinkedIn](https://www.linkedin.com/in/marcdacanay/)
 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License.
 
