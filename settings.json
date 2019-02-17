@@ -5,6 +5,17 @@
     "scripts": "scripts",
     "tests": "tests"
   },
+  "currentEnvironment": "dev",
+  "environments": {
+    "dev": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "statTestUrl": "http://httpstat.us"
+    },
+    "test": {
+      "baseUrl": "https://testenvironment.com",
+      "statTestUrl": "https://testenvironment.com"
+    }
+  },
   "asyncLimit": 1,
   "delay": 0
 }

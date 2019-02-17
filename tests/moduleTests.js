@@ -3,7 +3,7 @@ const { customValidation } = require('../scripts/customValidation');
 module.exports = {
   name: "Module Test",
   configs: {
-    baseUrl: "https://jsonplaceholder.typicode.com"
+    baseUrl: "{{baseUrl}}"
   },
   scenarios: [
     {

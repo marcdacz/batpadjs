@@ -5,10 +5,16 @@
     "scripts": "scripts",
     "tests": "tests"
   },
+  "currentEnvironment": "dev",
   "environments": {
-    "dev": "<DEV Environment URL>",
-    "test": "<TEST Environment URL>",
-    "preprod": "<PREPRO Environment URL>"
+    "dev": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "statTestUrl": "http://httpstat.us"
+    },
+    "test": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "statTestUrl": "http://httpstat.us"
+    }
   },
   "asyncLimit": 1,
   "delay": 0

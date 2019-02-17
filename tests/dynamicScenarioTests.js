@@ -32,7 +32,7 @@ const scenarioGenerator = () => {
 module.exports = {
   name: "Dynamic Scenario Generation Test",
   configs: {
-    baseUrl: "http://httpstat.us"
+    baseUrl: "{{statTestUrl}}"
   },
   scenarios: [ ...scenarioGenerator() ]
 };

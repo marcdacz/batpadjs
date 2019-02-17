@@ -46,8 +46,7 @@ module.exports = async (scenario, actualResponse, configs) => {
       for (const dataField of expectedResponse.data) {
         if (actualResponse.data) {
           let actualValue = jsonpath.value(actualResponse.data, dataField.path);
-
-
+          
           // Equals
           if (dataField.equals) {
             let expectedValue = dataField.equals;

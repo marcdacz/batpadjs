@@ -1,6 +1,6 @@
 {
   "name": "batpadjs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Declarative Specification-based API Test Automation Framework",
   "keywords": ["REST API Test", "Test Automation", "REST API", "Test Framework", "JSON"],
   "main": "./core/index.js",

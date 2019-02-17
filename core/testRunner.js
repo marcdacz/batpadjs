@@ -18,8 +18,7 @@ const DEFAULT_ASYNC_LIMIT = 1;
 module.exports.runTests = async (opts) => {
   opts = opts ? opts : {};
   let testFilter = opts.filter || DEFAULT_TESTS_FILTER;
-  let settingsFile = DEFAULT_SETTINGS_FILE;
-  let settings = fileHelpers.requireUncached(settingsFile);
+  let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
   let testSuites = fileHelpers.getJsFiles(testSuitesPath);
   let defaultGlobalDelay = settings.delay || DEFAULT_DELAY;
@@ -128,6 +127,21 @@ const executeSuite = async (testSuite, testFilter, reporter) => {
   }
 }
 
+const getUrlByEnv = (url) => {  
+  const regex = new RegExp('(?<={{)(.*)(?=}})');  
+  let envUrl = url;
+  if (regex.test(url)) {
+    let urlVariable = url.match(regex);
+    if (urlVariable && urlVariable.length > 0) {
+      let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
+      if (settings.currentEnvironment && settings.environments) {
+        envUrl = settings.environments[settings.currentEnvironment][urlVariable[0]];
+      }
+    }
+  }
+  return envUrl;
+}
+
 const executeScenario = async (scenario, configs, reporter) => {
   scenario.request = scenario.request ? scenario.request : {};
   scenario.request.fields = scenario.request.fields ? scenario.request.fields : [];
@@ -146,7 +160,9 @@ const executeScenario = async (scenario, configs, reporter) => {
   // --- SEND REQUEST ---
   let actualResponse;
   try {
-    let url = scenario.request.url ? configs.baseUrl + scenario.request.url : configs.baseUrl + configs.defaultEndpoint
+    let baseUrl = getUrlByEnv(configs.baseUrl);
+    let url = scenario.request.url ? baseUrl + scenario.request.url : baseUrl + configs.defaultEndpoint;
+    
     const res = await axios({
       url: url,
       method: scenario.request.method || configs.defaultMethod || DEFAULT_METHOD,
