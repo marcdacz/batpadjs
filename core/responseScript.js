@@ -1,4 +1,5 @@
-const jsonpath = require("jsonpath");
+const jsonpath = require('jsonpath');
+const { isJson } = require('./fileHelpers');
 
 module.exports = async (scenario, actualResponse, configs) => {
   if (!scenario.expected) {
@@ -12,7 +13,7 @@ module.exports = async (scenario, actualResponse, configs) => {
   if (!actualResponse) {
     scenario.result.state = 'failed';
     scenario.result.context.push({
-      error: `Response is undefined!`
+      error: `Response is undefined! Check your request then try again.`
     });
     return;
   }
@@ -45,8 +46,12 @@ module.exports = async (scenario, actualResponse, configs) => {
     if (expectedResponse.data) {
       for (const dataField of expectedResponse.data) {
         if (actualResponse.data) {
-          let actualValue = jsonpath.value(actualResponse.data, dataField.path);
+          let actualValue = actualResponse.data;
           
+          if (dataField.path && isJson(actualResponse.data)) {
+            actualValue = jsonpath.value(actualResponse.data, dataField.path);
+          }
+
           // Equals
           if (dataField.equals) {
             let expectedValue = dataField.equals;
