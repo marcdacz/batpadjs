@@ -18,6 +18,12 @@ const DEFAULT_ASYNC_LIMIT = 1;
 module.exports.runTests = async (opts) => {
   opts = opts ? opts : {};
   let testFilter = opts.filter || DEFAULT_TESTS_FILTER;
+
+  if (!fs.existsSync(DEFAULT_SETTINGS_FILE)) {
+    log.warn(`WARNING: Settings file not found!`);
+    return;
+  }
+
   let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
   let testSuites = fileHelpers.getJsFiles(testSuitesPath);

@@ -8,7 +8,7 @@
     "batpad": "./cli/index.js"
   },
   "scripts": {
-    "batpad-test": "node ./batpad.js"
+    "batpad-test": "cd examples && node ./batpad.js"
   },
   "repository": {
     "type": "git",
