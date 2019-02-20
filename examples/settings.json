@@ -9,7 +9,7 @@
     "env": "dev",
     "baseUrl": "{{baseUrl}}",
     "method": "get",
-    "asyncLimit": 1,
+    "asyncLimit": 2,
     "delay": 0
   },
   "environments": {

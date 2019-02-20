@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Promise = require('bluebird');
+const throat = require('throat')(require('bluebird'));
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
@@ -30,25 +31,21 @@ module.exports.runTests = async (opts) => {
 
   if (testSuites && testSuites.length > 0) {
     let reporter = new Reporter(settings);
-    await Promise.map(
-      testSuites,
-      testSuite => {
-        let suite = fileHelpers.requireUncached(testSuite);
-        if (suite.name && suite.scenarios) {
-          return new Promise(function(resolve, reject) {
-            setTimeout(() =>
-              resolve(executeSuite({
-                testSuite: suite,
-                testFilter: testFilter,
-                reporter: reporter,
-                settings: settings
-              })),
-              DEFAULT_DELAY);
-          });
-        }
-      },
-      { concurrency: DEFAULT_ASYNC_LIMIT }
-    );
+    await Promise.all(testSuites.map(throat(DEFAULT_ASYNC_LIMIT, testSuite => {
+      let suite = fileHelpers.requireUncached(testSuite);
+      if (suite.name && suite.scenarios) {
+        return new Promise(function (resolve, reject) {
+          setTimeout(() =>
+            resolve(executeSuite({
+              testSuite: suite,
+              testFilter: testFilter,
+              reporter: reporter,
+              settings: settings
+            })),
+            DEFAULT_DELAY);
+        });
+      }
+    })));
 
     // --- SAVE TEST REPORT ---  
     reporter.saveTestRunReport();
@@ -129,20 +126,14 @@ const executeSuite = async (suiteProperties) => {
     await runScript(configs.beforeAllScript, { configs: configs });
 
     // --- EXECUTE SCENARIO ---
-    await Promise.map(
-      scenarios,
-      scenario => { 
-        return new Promise(function(resolve, reject) {
-          setTimeout(() => resolve(executeScenario({
-            scenario: scenario,
-            configs: configs,
-            reporter: reporter,
-            settings: settings
-          })), defaultDelay);
-        });
-      },
-      { concurrency: defaultAsyncLimit }
-    );
+    await Promise.all(scenarios.map(throat(defaultAsyncLimit, scenario => new Promise((resolve, reject) => {
+      setTimeout(() => resolve(executeScenario({
+        scenario: scenario,
+        configs: configs,
+        reporter: reporter,
+        settings: settings
+      })), defaultDelay);
+    }))));
 
     // --- AFTER ALL SCRIPT ---
     await runScript(configs.afterAllScript, { configs: configs });
@@ -161,7 +152,7 @@ const getEnvar = (varName, settings) => {
       let currentEnvironment = settings.defaults.env || process.env.NODE_ENV;
       envarValue = settings.environments[currentEnvironment][envarMatch[0].trim()];
     }
-  }   
+  }
   return envarValue;
 }
 

@@ -126,14 +126,14 @@ data - Sets the expected data where you specify the JSON path and the Validation
 * [jsonpath](https://github.com/dchester/jsonpath) - Used to manipulate JSON Data
 * [yargs](https://github.com/yargs/yargs) - Used to create the CLI
 * [bluebird](https://github.com/petkaantonov/bluebird) - Promise Library
+* [throat](https://github.com/ForbesLindesay/throat) - Used to throttle parallelism
 * [moment](https://github.com/moment/moment) - Used for Date and Time stuff
 * [chalk](https://github.com/chalk/chalk) - Made the logging colorful
 * [shelljs](https://github.com/shelljs/shelljs) - Cross Environment Shell
 
 ## Authors
 
-* Marc Dacanay [Github](https://github.com/marcdacz) | [LinkedIn](https://www.linkedin.com/in/marcdacanay/)
-
+* Marc Dacanay ([Github](https://github.com/marcdacz) | [LinkedIn](https://www.linkedin.com/in/marcdacanay/))
 
 ## License
 
