@@ -18,7 +18,9 @@ module.exports = {
       expected: {
         status: 201,
         data: [
-          { path: "$.title", value: "Live Long and Prosper" }
+          { path: "$.title", equals: "Live Long and Prosper" },
+          { path: "$.body", contains: "computer" },
+          { path: "$.body", notcontains: "StarWars" }
         ]
       }
     }
