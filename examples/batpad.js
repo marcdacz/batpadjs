@@ -1,4 +1,4 @@
-require('../core')
+require('../')
   .test({
     filter: 'Before'
   });

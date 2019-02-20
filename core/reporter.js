@@ -6,7 +6,8 @@ const timeHelpers = require('./timeHelpers');
 
 module.exports = class Reporter {
 
-  constructor() {
+  constructor(settings) {
+    this.settings = settings;
     this.test = {};
     this.test.suites = [];
     this.test.result = {
@@ -21,7 +22,7 @@ module.exports = class Reporter {
 
   saveTestRunReport() {
     this.test.result.end = moment();
-    this.test.result.duration = timeHelpers.getDuration(this.test.result.start, this.test.result.end);    
+    this.test.result.duration = timeHelpers.getDuration(this.test.result.start, this.test.result.end);
     this.test.result.totalPassedTestCount = this.getTotalPassedTests();
     this.test.result.totalFailedTestCount = this.getTotalFailedTests();
     this.test.result.totalTestCount = this.test.result.totalPassedTestCount + this.test.result.totalFailedTestCount;
@@ -29,14 +30,10 @@ module.exports = class Reporter {
     this.test.result.passPercentage = (this.test.result.totalPassedTestCount * 100 / this.test.result.totalTestCount).toFixed(2) + '%';
     this.test.result.state = this.test.result.totalFailedTestCount > 0 ? 'failed' : 'passed';
 
-    // Write report to disk
-    const settings = fileHelpers.requireUncached(join(process.cwd(), 'settings.json'));
-    if (settings) {
-      const reportPath = settings.paths.reports || 'reports';
-      const reportFilename = join(process.cwd(), reportPath, 'testReport.json');
-      fileHelpers.ensureDirectoryPath(reportFilename);
-      fs.writeFileSync(reportFilename, JSON.stringify(this.test, null, 2));
-    }
+    const reportPath = this.settings.paths.reports || 'reports';
+    const reportFilename = join(process.cwd(), reportPath, 'testReport.json');
+    fileHelpers.ensureDirectoryPath(reportFilename);
+    fs.writeFileSync(reportFilename, JSON.stringify(this.test, null, 2));
   }
 
   addTest(testSuite) {
@@ -49,7 +46,7 @@ module.exports = class Reporter {
       count += suite.scenarios.filter(scenario => {
         if (scenario.result) {
           return scenario.result.state === 'failed'
-        }        
+        }
       }).length;
     });
     return count;
@@ -61,7 +58,7 @@ module.exports = class Reporter {
       count += suite.scenarios.filter(scenario => {
         if (scenario.result) {
           return scenario.result.state === 'passed'
-        }        
+        }
       }).length;
     });
     return count;

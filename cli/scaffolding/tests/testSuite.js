@@ -1,7 +1,7 @@
 module.exports = {
   name: "Sample Test Suite",
   configs: {
-    baseUrl: "https://jsonplaceholder.typicode.com"
+    baseUrl: "{{baseUrl}}"
   },
   scenarios: [
     {

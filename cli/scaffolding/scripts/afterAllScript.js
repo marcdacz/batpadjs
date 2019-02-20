@@ -1,3 +1,4 @@
-module.exports = async (configs) => {  
-
+module.exports = async (testProperties) => {  
+  let configs = testProperties.configs;
+  
 };

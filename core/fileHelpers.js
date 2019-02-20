@@ -7,8 +7,6 @@ const ensureDirectoryPath = filePath => {
   if (fs.existsSync(dirname)) {
     return true;
   }
-  console.log('NOT FOUND');
-
   ensureDirectoryPath(dirname);
   fs.mkdirSync(dirname);
 };

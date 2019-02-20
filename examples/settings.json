@@ -5,17 +5,21 @@
     "scripts": "scripts",
     "tests": "tests"
   },
-  "currentEnvironment": "dev",
+  "defaults": {
+    "env": "dev",
+    "baseUrl": "{{baseUrl}}",
+    "method": "get",
+    "asyncLimit": 1,
+    "delay": 0
+  },
   "environments": {
     "dev": {
       "baseUrl": "https://jsonplaceholder.typicode.com",
       "statTestUrl": "http://httpstat.us"
     },
     "test": {
-      "baseUrl": "https://testenvironment.com",
-      "statTestUrl": "https://testenvironment.com"
+      "baseUrl": "https://test.jsonplaceholder.typicode.com",
+      "statTestUrl": "http://test.httpstat.us"
     }
-  },
-  "asyncLimit": 1,
-  "delay": 0
+  }
 }

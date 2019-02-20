@@ -1,3 +1,5 @@
-module.exports = async (scenario) => {
-  console.log('Yay! Im in after...');
+module.exports = async (testProperties) => {
+  let configs = testProperties.configs;
+  let actualResponse = testProperties.actualResponse;
+  
 };

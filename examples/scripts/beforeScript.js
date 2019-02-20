@@ -5,7 +5,8 @@ const replaceId = (text, id) => {
   return prefix[0] + id;
 };
 
-module.exports = async (scenario) => {
+module.exports = async (testProperties) => {
+  let scenario = testProperties.scenario;
   let uniqueId = Math.floor(1000 + Math.random() * 1000);
   scenario.request.uniqueId = uniqueId;
 

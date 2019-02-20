@@ -1,4 +1,4 @@
-module.exports = async (scenario) => {
-  console.log('Yay! Im in afterAll...');
+module.exports = async (testProperties) => {
+  let configs = testProperties.configs;
 
 };
