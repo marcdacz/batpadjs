@@ -2,7 +2,7 @@ const axios = require('axios');
 const Promise = require('bluebird');
 const throat = require('throat')(require('bluebird'));
 const fs = require('fs');
-const path = require('path');
+const {join, resolve} = require('path');
 const moment = require('moment');
 const log = require('./logger');
 const fileHelpers = require('./fileHelpers');
@@ -11,6 +11,8 @@ const Reporter = require('./reporter');
 
 const DEFAULT_METHOD = 'get';
 const DEFAULT_SETTINGS_FILE = 'settings.json';
+const DEFAULT_DATA_PATH = 'data';
+const DEFAULT_SCRIPTS_PATH = 'scripts';
 const DEFAULT_TESTS_PATH = 'tests';
 const DEFAULT_TESTS_FILTER = '^((?!\@ignore).)*$';
 const DEFAULT_DELAY = 0;
@@ -84,9 +86,11 @@ const displayOverallTestResult = (reporter) => {
   }
 }
 
-const runScript = async (scriptPath, testObject) => {
-  if (scriptPath) {
-    let scriptResolvedPath = path.resolve(scriptPath);
+const runScript = async (script, testObject) => {
+  if (script) {
+    let settings = testObject.settings;
+    let scriptsPath = settings.paths.scripts || DEFAULT_SCRIPTS_PATH;
+    let scriptResolvedPath = resolve(join(scriptsPath, script));
     if (fs.existsSync(scriptResolvedPath)) {
       try {
         await require(scriptResolvedPath)(testObject);
@@ -94,7 +98,7 @@ const runScript = async (scriptPath, testObject) => {
         log.error(`ERROR: ${error}`);
       }
     } else {
-      log.warn(`WARNING: Script not found: ${scriptPath}`);
+      log.warn(`WARNING: Script not found: ${script}`);
     }
   }
 };
@@ -120,10 +124,11 @@ const executeSuite = async (suiteProperties) => {
   let defaultAsyncLimit = configs.asyncLimit || settings.defaults.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (scenarios.length > 0) {
+
     log.info(testSuite.name);
 
     // --- BEFORE ALL SCRIPT ---
-    await runScript(configs.beforeAllScript, { configs: configs });
+    await runScript(configs.beforeAllScript, { configs: configs, settings: settings });
 
     // --- EXECUTE SCENARIO ---
     await Promise.all(scenarios.map(throat(defaultAsyncLimit, scenario => new Promise((resolve, reject) => {
@@ -136,7 +141,7 @@ const executeSuite = async (suiteProperties) => {
     }))));
 
     // --- AFTER ALL SCRIPT ---
-    await runScript(configs.afterAllScript, { configs: configs });
+    await runScript(configs.afterAllScript, { configs: configs, settings: settings });
 
     // --- TEST REPORT ---
     reporter.addTest(testSuite);
@@ -170,8 +175,8 @@ const executeScenario = async (scenarioProperties) => {
   scenario.result.start = moment();
 
   // --- BEFORE SCRIPT ---
-  await runScript(configs.beforeEachScript, { scenario: scenario });
-  await runScript(scenario.beforeScript, { scenario: scenario });
+  await runScript(configs.beforeEachScript, { scenario: scenario, settings: settings });
+  await runScript(scenario.beforeScript, { scenario: scenario, settings: settings });
 
   // --- REQUEST SCRIPT ---
   require('./requestScript')(scenario, configs);
@@ -183,19 +188,20 @@ const executeScenario = async (scenarioProperties) => {
     let baseUrl = getEnvar(defaultUrl, settings);
     let urlPath = scenario.request.url || configs.defaultEndpoint;
     let url = baseUrl + urlPath;
+    let method = scenario.request.method || configs.defaultMethod || settings.defaults.method || DEFAULT_METHOD;
 
     const res = await axios({
       url: url,
-      method: scenario.request.method || configs.defaultMethod || settings.defaults.method || DEFAULT_METHOD,
-      headers: scenario.headers,
-      params: scenario.params,
+      method: method,
+      headers: scenario.request.headers,
+      params: scenario.request.params,
       data: scenario.request.body,
       timeout: configs.timeout,
-      withCredentials: scenario.withCredentials,
-      auth: scenario.auth,
-      xsrfCookieName: scenario.xsrfCookieName,
-      xsrfHeaderName: scenario.xsrfHeaderName,
-      proxy: scenario.proxy
+      withCredentials: scenario.request.withCredentials,
+      auth: scenario.request.auth,
+      xsrfCookieName: scenario.request.xsrfCookieName,
+      xsrfHeaderName: scenario.request.xsrfHeaderName,
+      proxy: scenario.request.proxy
     });
     actualResponse = res;
   } catch (error) {
@@ -208,8 +214,8 @@ const executeScenario = async (scenarioProperties) => {
   await require('./responseScript')(scenario, actualResponse, configs);
 
   // --- AFTER SCRIPT ---
-  await runScript(scenario.afterScript, { scenario: scenario, actualResponse: actualResponse });
-  await runScript(configs.afterEachScript, { scenario: scenario, actualResponse: actualResponse });
+  await runScript(scenario.afterScript, { scenario: scenario, actualResponse: actualResponse, settings: settings });
+  await runScript(configs.afterEachScript, { scenario: scenario, actualResponse: actualResponse, settings: settings });
 
   scenario.result.end = moment();
   scenario.result.duration = timeHelpers.getDuration(scenario.result.start, scenario.result.end);

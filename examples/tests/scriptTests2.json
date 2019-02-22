@@ -8,7 +8,7 @@
       "title": "Using Default Body from Configs",
       "body": "This test uses default body from test suite configs"
     }, 
-    "beforeEachScript": "scripts/beforeEachScript.js"
+    "beforeEachScript": "beforeEachScript.js"
   },
   "scenarios": [    
     {

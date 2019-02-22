@@ -9,7 +9,7 @@
       "title": "Using Default Body from Configs",
       "body": "This test uses default body from test suite configs"
     }, 
-    "beforeAllScript": "scripts/beforeAllScript.js"
+    "beforeAllScript": "beforeAllScript.js"
   },
   "scenarios": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "test": "Before Script",
-      "beforeScript": "scripts/beforeScript.js",
+      "beforeScript": "beforeScript.js",
       "request": {
         "fields": [
           { "path": "$.title", "value": "%TITLEID%" },
