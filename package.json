@@ -14,7 +14,9 @@
     "batpad": "./cli/index.js"
   },
   "scripts": {
-    "batpad-test": "cd examples && node ./batpad.js"
+    "mocha": "node ./node_modules/mocha/bin/mocha",
+    "unit-test": "mocha --opts ./mocha.opts",
+    "sys-test": "cd examples && node ./batpad.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +42,8 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.2.3"
+    "@babel/preset-env": "^7.2.3",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.1"
   }
 }
