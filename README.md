@@ -1,5 +1,18 @@
 # BatPadJS
-Create Automated REST API Tests in seconds using BatPadJS. It features an easy to use CLI that allows you to initialise a project, create test suites and scripts. It also comes with built-in features that generates JSON request data dynamically as well as validate response data in a declarative, specification-based approach.
+Declarative Specification-based REST API Test Automation Framework
+
+## Start with the Why?
+If you find yourself needing to automate with the following requirements:
+- You have a RESTful API Project
+- You also have a massive JSON Body you want to dynamically generate
+- You also need to validate a JSON output
+- You want an easy-to-create and easy-to-read test cases
+
+Then you came at the right place!
+
+_Introducing BatPadJS_
+
+Create Automated REST API Tests in seconds using BatPadJS. It even features an easy to use CLI that allows you to initialise a project, create test suites and scripts. It also comes with built-in features that generates JSON request data dynamically as well as validate response data in a declarative, specification-based approach.
 
 ## Getting Started
 ### Installing
@@ -47,41 +60,43 @@ batpad gen aftercript --name SomeName
 ### Test Anatomy
 ```
 {
-  "name": "Sample BatPadJS Test Suite",
-  "configs": {
-    "baseUrl": "https://jsonplaceholder.typicode.com",
-    "defaultEndpoint": "/posts",
-    "defaultMethod": "post",  
-    "defaultBody": {
-      "id": 123456,
-      "title": "Using Default Body from Configs",
-      "body": "This test uses default body from test suite configs"
-    }, 
-    "beforeAllScript": "scripts/beforeAllScript.js"
+  name: "Sample Test Suite",
+  configs: {
+    baseUrl: "{{baseUrl}}",
+    beforeAllScript: "beforeAllScript.js",
+    afterAllScript: "afterAllScript.js"
   },
-  "scenarios": [
+  scenarios: [
     {
-      "test": "Sample @smoke test scenario",
-      "request": {
-        "url": "/posts",
-        "method": "post",
-        "bodyPath": "data/bodyFromFile.json"
+      test: "Sample Scenario",
+      beforeScript: "beforeScript.js",
+      afterScript: "afterScript.js",
+      request: {
+        url: "/posts",
+        method: "post",
+        bodyPath: "data/bodyFromFile.json",
+        fields: [
+          { path: "$.title", value: "Live Long and Prosper" },
+          { path: "$.body", value: "Computer, run a level-two diagnostic on warp-drive systems." },
+        ]
       },
-      "expected": {
-        "status": 201,
-        "data": [
-          { "path": "$.title", "equals": "Using Default Body Title from Configs updated in BeforeAll script" },
-          { "path": "$.body", "contains": "BeforeAll" },
-          { "path": "$.body", "notcontains": "test suite" }
+      expected: {
+        status: 201,
+        data: [
+          { path: "$.title", equals: "Live Long and Prosper" },
+          { path: "$.body", contains: "computer" },
+          { path: "$.body", notcontains: "StarWars" },
+          { path: "$.body", callback: customValidation }
         ]
       }
     }
   ]
-}
+};
 
 ```
+See more [Examples](https://github.com/marcdacz/BatPadJS/tree/master/examples)
 
-__**Configuration**__
+**Configuration**
 
 ```
 baseUrl - Sets the base url to be used in the test suite
@@ -95,7 +110,7 @@ afterEachScript - Sets the afterEachScript path inside the scripts folder
 afterAllScript - Sets the afterAllScript path inside the script folder
 ```
 
-__**Scenarios**__
+**Scenarios**
 ```
 test - Test Scenario Name or Description
 request - Sets the Request Details
@@ -103,7 +118,7 @@ expected - Sets the Expected Results
 
 ```
 
-__Request__
+**Request**
 ```
 url - Sets the endpoint to be used in the scenario
 method - Sets the REST method for the scenario. Overrides the defaultMethod from the Configs
@@ -111,13 +126,14 @@ headers - Sets the Request Headers
 params - Sets the Request Parameters
 body - Sets the Request Body JSON
 bodyPath - Sets the Request Body JSON File Path. Overrides the defaultBodyPath from the configs
+fields - An array of JSON paths and their corresponding values you want to insert or update
 ```
 
-__Expected__
+**Expected**
 ```
 status - Sets the expected status code
 statusText - Sets the expected status text
-data - Sets the expected data where you specify the JSON path and the Validation Method such as equals, contains or notcontains
+data - Sets the expected data where you specify the JSON path and the Validation Method such as _equals_, _contains_ or _notcontains_ as well as having a _callback_ for customValidation method
 ```
 
 ## Built With
