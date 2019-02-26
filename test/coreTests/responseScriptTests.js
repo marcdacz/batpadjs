@@ -88,6 +88,24 @@ describe('Core: ResponseScript Tests', () => {
         expect(scenario.result.state).to.be.equal('passed');
     });
 
+    it('should validate expected data inline - passed', async () => {
+        scenario.expected = {
+            data: [
+                { path: '$.title', equals: 'Live Long and Prosper' },
+                { path: '$.body', contains: 'computer', notcontains: 'StarWars' }
+            ]
+        };
+        let actualResponse = {
+            data: {
+                title: 'Live Long and Prosper',
+                body: 'Computer, run a level-two diagnostic on warp-drive systems.'
+            }
+        };
+
+        await responseScript(scenario, actualResponse);
+        expect(scenario.result.state).to.be.equal('passed');
+    });
+
     it('should validate expected data - failed', async () => {
         scenario.expected = {
             data: [
@@ -122,6 +140,23 @@ describe('Core: ResponseScript Tests', () => {
             path: '$.body',
             actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
             notcontains: 'computer'
+        });
+    });
+
+    it('should validate expected data - no response', async () => {
+        scenario.expected = {
+            data: [
+                { path: '$.title', equals: 'Lives Long and Prosper' },
+                { path: '$.body', contains: 'macintosh' },
+                { path: '$.body', notcontains: 'computer' }
+            ]
+        };
+        let actualResponse = {};
+
+        await responseScript(scenario, actualResponse);
+        expect(scenario.result.state).to.be.equal('failed');
+        expect(scenario.result.context).to.deep.include({
+            error: 'Field not found!'
         });
     });
 
