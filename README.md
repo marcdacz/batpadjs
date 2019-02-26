@@ -133,7 +133,7 @@ fields - An array of JSON paths and their corresponding values you want to inser
 ```
 status - Sets the expected status code
 statusText - Sets the expected status text
-data - Sets the expected data where you specify the JSON path and the Validation Method such as _equals_, _contains_ or _notcontains_ as well as having a _callback_ for customValidation method
+data - Sets the expected data where you specify the JSON path and the Validation Method such as _equals_, _contains_ or _notcontains_ as well as having a _callback_ for customValidation method. You can also add custom properties you can use in the _callback_ function!
 ```
 
 ## Built With
