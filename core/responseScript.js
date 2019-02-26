@@ -96,7 +96,7 @@ module.exports = async (scenario, actualResponse, configs) => {
 
           // Callback
           if (dataField.callback) {
-            dataField.callback(dataField.path, actualValue, scenario);
+            dataField.callback(dataField, actualValue, scenario);
           }
         } else {
           scenario.result.state = 'failed';

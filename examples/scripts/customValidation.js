@@ -1,12 +1,12 @@
-const customValidation = (fieldPath, actualValue, scenario) => {
+const customValidation = (field, actualValue, scenario) => {
   let expectedValue = 'This is a body from a file';
   if (actualValue === expectedValue) {
     scenario.result.state = 'passed';
   } else {
     scenario.result.state = 'failed';
     scenario.result.context.push({
-      error: "Field value is incorrect!",
-      path: fieldPath,
+      message: field.customMessage,
+      path: field.path,
       actual: actualValue,
       expected: expectedValue
     });

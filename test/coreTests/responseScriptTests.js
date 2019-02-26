@@ -1,4 +1,5 @@
-describe.only('Core: ResponseScript Tests', () => {
+describe('Core: ResponseScript Tests', () => {
+    const sinon = require('sinon');
     const moment = require('moment');
     const chai = require('chai');
     const expect = chai.expect;
@@ -41,7 +42,7 @@ describe.only('Core: ResponseScript Tests', () => {
         await responseScript(scenario, actualResponse);
         expect(scenario.result.state).to.be.equal('failed');
         expect(scenario.result.context).to.deep.include({
-            error: "Response status is incorrect!",
+            error: 'Response status is incorrect!',
             actual: 201,
             expected: 200
         });
@@ -62,9 +63,84 @@ describe.only('Core: ResponseScript Tests', () => {
         await responseScript(scenario, actualResponse);
         expect(scenario.result.state).to.be.equal('failed');
         expect(scenario.result.context).to.deep.include({
-            error: "Response status text is incorrect!",
+            error: 'Response status text is incorrect!',
             actual: 'Bad Request',
             expected: 'Success'
         });
+    });
+
+    it('should validate expected data - passed', async () => {
+        scenario.expected = {
+            data: [
+                { path: '$.title', equals: 'Live Long and Prosper' },
+                { path: '$.body', contains: 'computer' },
+                { path: '$.body', notcontains: 'StarWars' }
+            ]
+        };
+        let actualResponse = {
+            data: {
+                title: 'Live Long and Prosper',
+                body: 'Computer, run a level-two diagnostic on warp-drive systems.'
+            }
+        };
+
+        await responseScript(scenario, actualResponse);
+        expect(scenario.result.state).to.be.equal('passed');
+    });
+
+    it('should validate expected data - failed', async () => {
+        scenario.expected = {
+            data: [
+                { path: '$.title', equals: 'Lives Long and Prosper' },
+                { path: '$.body', contains: 'macintosh' },
+                { path: '$.body', notcontains: 'computer' }
+            ]
+        };
+        let actualResponse = {
+            data: {
+                title: 'Live Long and Prosper',
+                body: 'Computer, run a level-two diagnostic on warp-drive systems.'
+            }
+        };
+
+        await responseScript(scenario, actualResponse);
+        expect(scenario.result.state).to.be.equal('failed');
+        expect(scenario.result.context).to.deep.include({
+            error: 'Field value is incorrect!',
+            path: '$.title',
+            actual: 'Live Long and Prosper',
+            expected: 'Lives Long and Prosper'
+        });
+        expect(scenario.result.context).to.deep.include({
+            error: 'Field value is incorrect!',
+            path: '$.body',
+            actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
+            contains: 'macintosh'
+        });
+        expect(scenario.result.context).to.deep.include({
+            error: 'Field value is incorrect!',
+            path: '$.body',
+            actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
+            notcontains: 'computer'
+        });
+    });
+
+    it('should validate expected data - callback', async () => {
+        let customValidation = sinon.fake();
+        scenario.expected = {
+            data: [
+                { path: '$.body', callback: customValidation }
+            ]
+        };
+        let actualResponse = {
+            data: {
+                title: 'Live Long and Prosper',
+                body: 'Computer, run a level-two diagnostic on warp-drive systems.'
+            }
+        };
+
+        await responseScript(scenario, actualResponse);
+        expect(scenario.result.state).to.be.equal('passed');
+        expect(customValidation.callCount).to.be.equal(1);
     });
 });

@@ -17,7 +17,7 @@ module.exports = {
         status: 201,
         data: [
           { path: "$.title", equals: "This is a title from a file" },
-          { path: "$.body", callback: customValidation }
+          { path: "$.body", callback: customValidation, customMessage: "Beauty is transitory." }
         ]
       }
     }

@@ -42,9 +42,7 @@ const failedTest = (test, duration) => {
 };
 
 const failedTestContext = (context) => {
-  context
-    .filter(test => test.hasOwnProperty('error'))
-    .map(context => { log(chalk.yellow(JSON.stringify(context, null, 2))); })
+  context.map(ctxt => { log(chalk.yellow(JSON.stringify(ctxt, null, 2))); })
 };
 
 module.exports = {

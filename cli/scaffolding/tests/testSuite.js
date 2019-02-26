@@ -27,15 +27,9 @@ module.exports = {
           { path: "$.title", equals: "Live Long and Prosper" },
           { path: "$.body", contains: "computer" },
           { path: "$.body", notcontains: "StarWars" },
-          { path: "$.body", callback: customValidation }
+          { path: "$.body", callback: customValidation, customMessage: "Beauty is transitory." }
         ]
       }
     }
   ]
 };
-
-
-
-
-
-
