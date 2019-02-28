@@ -1,4 +1,1 @@
-require('../')
-  .test({
-    filter: 'Before'
-  });
+require('../').test();

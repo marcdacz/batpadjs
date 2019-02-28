@@ -1,16 +1,16 @@
 # BatPadJS
-Declarative Specification-based REST API Test Automation Framework
+Declarative Specification-based API Test Automation Framework
 
 ## Start with the Why?
 If you find yourself needing to automate with the following requirements:
-- You have a RESTful API Project
-- You also have a massive JSON Body you want to dynamically generate
+- You have an API Project
+- You also have a massive JSON Body you want to dynamically generate in each of your tests
 - You also need to validate a JSON output
-- You want an easy-to-create and easy-to-read test cases
+- You want easy-to-create and easy-to-read test cases
 
 Then you came at the right place!
 
-_Introducing BatPadJS_
+### Introducing BatPadJS
 
 Create Automated REST API Tests in seconds using BatPadJS. It even features an easy to use CLI that allows you to initialise a project, create test suites and scripts. It also comes with built-in features that generates JSON request data dynamically as well as validate response data in a declarative, specification-based approach.
 
@@ -63,6 +63,12 @@ batpad gen aftercript --name SomeName
   name: "Sample Test Suite",
   configs: {
     baseUrl: "{{baseUrl}}",
+    defaultEndpoint: "/posts",
+    defaultMethod: "post",  
+    defaultBody: {     
+      "title": "Make It So",
+      "body": "To Boldly Go Where No Tester Has Gone Before..."
+    }, 
     beforeAllScript: "beforeAllScript.js",
     afterAllScript: "afterAllScript.js"
   },
@@ -129,14 +135,64 @@ bodyPath - Sets the Request Body JSON File Path. Overrides the defaultBodyPath f
 fields - An array of JSON paths and their corresponding values you want to insert or update
 ```
 
+Note:
+_scenario.request.body_ overrides _scenario.request.bodyPath_ overrides _configs.defaultBodyPath_ overrides _configs.defaultBody_ 
+
 **Expected**
 ```
 status - Sets the expected status code
 statusText - Sets the expected status text
-data - Sets the expected data where you specify the JSON path and the Validation Method such as _equals_, _contains_ or _notcontains_ as well as having a _callback_ for customValidation method. You can also add custom properties you can use in the _callback_ function!
+data - Sets the expected data where you specify the JSON path and the Validation Method such as equals, contains or notcontains as well as having a callback for customValidation method. You can also add custom properties you can use in the callback function!
 ```
 
-## Built With
+### Global Settings (settings.json)
+```
+{
+  "paths": {    
+    "reports": "reports",
+    "scripts": "scripts",
+    "tests": "tests"
+  },
+  "configs": {
+    "env": "dev",
+    "baseUrl": "{{baseUrl}}",
+    "method": "get",
+    "asyncLimit": 2,
+    "delay": 0,
+    "beforeAllScript": "beforeAllScript.js",
+    "afterAllScript": "afterAllScript.js"
+  },
+  "environments": {
+    "dev": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "statTestUrl": "http://httpstat.us"
+    },
+    "test": {
+      "baseUrl": "https://test.jsonplaceholder.typicode.com",
+      "statTestUrl": "http://test.httpstat.us"
+    }
+  }
+}
+```
+
+**Settings File**
+```
+paths - Here we specify the paths for tests, scripts, reports, etc.
+configs - Global Configuration to specify default values for environment, baseUrl, etc. Also provides scripts to run Before/After all test suites run
+environments - Contains Environment Variables
+```
+## Development
+```
+npm install 
+
+npm run unit-test
+
+npm run sys-test
+```
+
+Note: To test the CLI locally, you can use _npm link_ command
+
+### Built With
 
 * [axios](https://github.com/axios/axios) - HTTP Client used
 * [jsonpath](https://github.com/dchester/jsonpath) - Used to manipulate JSON Data
@@ -147,7 +203,7 @@ data - Sets the expected data where you specify the JSON path and the Validation
 * [chalk](https://github.com/chalk/chalk) - Made the logging colorful
 * [shelljs](https://github.com/shelljs/shelljs) - Cross Environment Shell
 
-## Authors
+### Authors
 
 * Marc Dacanay ([Github](https://github.com/marcdacz) | [LinkedIn](https://www.linkedin.com/in/marcdacanay/))
 

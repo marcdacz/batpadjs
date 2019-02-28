@@ -1,0 +1,192 @@
+[
+  {
+    "name": "Test Suite 1",
+    "configs": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "defaultEndpoint": "/posts",
+      "defaultMethod": "post",
+      "defaultBodyPath": "data/bodyFromFile.json"
+    },
+    "scenarios": [
+      {
+        "test": "Using Default Method and Endpoint",
+        "request": {
+          "body": {
+            "id": 12345,
+            "title": "Using default method and endpoint",
+            "body": "This test uses the default method and endpoint"
+          }
+        },
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "Using default method and endpoint"
+            },
+            {
+              "path": "$.body",
+              "equals": "This test uses the default method and endpoint"
+            }
+          ]
+        }
+      },
+      {
+        "test": "Updating Fields from Scenario Body",
+        "request": {
+          "body": {
+            "id": 12345,
+            "title": "Using default method and endpoint",
+            "body": "This test uses the default method and endpoint"
+          },
+          "fields": [
+            {
+              "path": "$.title",
+              "value": "Updating Scenario Body Fields"
+            },
+            {
+              "path": "$.body",
+              "value": "This test will verify updating json fields"
+            }
+          ]
+        },
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "Updating Scenario Body Fields"
+            },
+            {
+              "path": "$.body",
+              "equals": "This test will verify updating json fields"
+            }
+          ]
+        }
+      },
+      {
+        "test": "Using Scenario Method and Endpoint",
+        "request": {
+          "url": "/posts/1",
+          "method": "get"
+        },
+        "expected": {
+          "status": 200,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
+            },
+            {
+              "path": "$.body",
+              "equals": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+            }
+          ]
+        }
+      },
+      {
+        "test": "Posting Default Body Path",
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "This is a title from a file"
+            },
+            {
+              "path": "$.body",
+              "equals": "This is a body from a file"
+            }
+          ]
+        }
+      },
+      {
+        "test": "Updating Json Fields from Default Body Path",
+        "request": {
+          "fields": [
+            {
+              "path": "$.title",
+              "value": "Updating Default Body from File"
+            },
+            {
+              "path": "$.body",
+              "value": "This test will verify updating json fields from the default one"
+            }
+          ]
+        },
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "Updating Default Body from File"
+            },
+            {
+              "path": "$.body",
+              "equals": "This test will verify updating json fields from the default one"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Test Suite 2",
+    "configs": {
+      "baseUrl": "https://jsonplaceholder.typicode.com",
+      "defaultEndpoint": "/posts",
+      "defaultMethod": "post",
+      "defaultBody": {
+        "id": 123456,
+        "title": "Using Default Body from Configs",
+        "body": "This test uses default body from test suite configs"
+      }
+    },
+    "scenarios": [
+      {
+        "test": "Using Default Body from Configs",
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "Using Default Body from Configs"
+            },
+            {
+              "path": "$.body",
+              "equals": "This test uses default body from test suite configs"
+            }
+          ]
+        }
+      },
+      {
+        "test": "Updating Fields of Body from Configs",
+        "request": {
+          "fields": [
+            {
+              "path": "$.title",
+              "value": "Updating Configs Body Fields"
+            },
+            {
+              "path": "$.body",
+              "value": "This test will verify updating json fields"
+            }
+          ]
+        },
+        "expected": {
+          "status": 201,
+          "data": [
+            {
+              "path": "$.title",
+              "equals": "Updating Configs Body Fields"
+            },
+            {
+              "path": "$.body",
+              "equals": "This test will verify updating json fields"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

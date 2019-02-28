@@ -1,11 +1,10 @@
 {
   "paths": {    
-    "data": "data",
     "reports": "reports",
     "scripts": "scripts",
     "tests": "tests"
   },
-  "defaults": {
+  "configs": {
     "env": "dev",
     "baseUrl": "{{baseUrl}}",
     "method": "get",

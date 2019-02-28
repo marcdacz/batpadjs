@@ -2,7 +2,7 @@ const axios = require('axios');
 const Promise = require('bluebird');
 const throat = require('throat')(require('bluebird'));
 const fs = require('fs');
-const {join, resolve} = require('path');
+const { join, resolve } = require('path');
 const moment = require('moment');
 const log = require('./logger');
 const fileHelpers = require('./fileHelpers');
@@ -11,12 +11,28 @@ const Reporter = require('./reporter');
 
 const DEFAULT_METHOD = 'get';
 const DEFAULT_SETTINGS_FILE = 'settings.json';
-const DEFAULT_DATA_PATH = 'data';
 const DEFAULT_SCRIPTS_PATH = 'scripts';
 const DEFAULT_TESTS_PATH = 'tests';
 const DEFAULT_TESTS_FILTER = '^((?!\@ignore).)*$';
 const DEFAULT_DELAY = 0;
 const DEFAULT_ASYNC_LIMIT = 1;
+
+const runScript = async (script, testObject) => {
+  if (script) {
+    let settings = testObject.settings;
+    let scriptsPath = settings.paths.scripts || DEFAULT_SCRIPTS_PATH;
+    let scriptResolvedPath = resolve(join(scriptsPath, script));
+    if (fs.existsSync(scriptResolvedPath)) {
+      try {
+        await require(scriptResolvedPath)(testObject);
+      } catch (error) {
+        log.error(`ERROR: ${error}`);
+      }
+    } else {
+      log.warn(`WARNING: Script not found: ${script}`);
+    }
+  }
+};
 
 module.exports.runTests = async (opts) => {
   opts = opts ? opts : {};
@@ -26,20 +42,28 @@ module.exports.runTests = async (opts) => {
     log.warn(`WARNING: Settings file not found!`);
     return;
   }
-
+  
   let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
-  let testSuites = fileHelpers.getJsFiles(testSuitesPath);
+  let testSuites = opts.testSuites || fileHelpers.getJsFiles(testSuitesPath).map(testSuite => fileHelpers.requireUncached(testSuite));
 
   if (testSuites && testSuites.length > 0) {
     let reporter = new Reporter(settings);
+    if (opts.reporter) {
+      reporter = opts.reporter;
+    }
+
+    // --- BEFORE ALL SCRIPT ---
+    await runScript(settings.configs.beforeAllScript, { settings: settings, reporter: reporter });
+
+    // --- EXECUTE SUITE ---
     await Promise.all(testSuites.map(throat(DEFAULT_ASYNC_LIMIT, testSuite => {
-      let suite = fileHelpers.requireUncached(testSuite);
-      if (suite.name && suite.scenarios) {
-        return new Promise(function (resolve, reject) {
+      // let testSuite = fileHelpers.requireUncached(testSuite);
+      if (testSuite.name && testSuite.scenarios) {
+        return new Promise(function(resolve, reject) {
           setTimeout(() =>
             resolve(executeSuite({
-              testSuite: suite,
+              testSuite: testSuite,
               testFilter: testFilter,
               reporter: reporter,
               settings: settings
@@ -52,6 +76,9 @@ module.exports.runTests = async (opts) => {
     // --- SAVE TEST REPORT ---  
     reporter.saveTestRunReport();
     displayOverallTestResult(reporter);
+
+    // --- AFTER ALL SCRIPT ---
+    await runScript(settings.configs.afterAllScript, { settings: settings, reporter: reporter });
   }
 };
 
@@ -86,23 +113,6 @@ const displayOverallTestResult = (reporter) => {
   }
 }
 
-const runScript = async (script, testObject) => {
-  if (script) {
-    let settings = testObject.settings;
-    let scriptsPath = settings.paths.scripts || DEFAULT_SCRIPTS_PATH;
-    let scriptResolvedPath = resolve(join(scriptsPath, script));
-    if (fs.existsSync(scriptResolvedPath)) {
-      try {
-        await require(scriptResolvedPath)(testObject);
-      } catch (error) {
-        log.error(`ERROR: ${error}`);
-      }
-    } else {
-      log.warn(`WARNING: Script not found: ${script}`);
-    }
-  }
-};
-
 const executeSuite = async (suiteProperties) => {
   let testSuite = suiteProperties.testSuite;
   let testFilter = suiteProperties.testFilter;
@@ -120,8 +130,8 @@ const executeSuite = async (suiteProperties) => {
     }
   });
 
-  let defaultDelay = configs.delay || settings.defaults.delay || DEFAULT_DELAY;
-  let defaultAsyncLimit = configs.asyncLimit || settings.defaults.asyncLimit || DEFAULT_ASYNC_LIMIT;
+  let defaultDelay = configs.delay || settings.configs.delay || DEFAULT_DELAY;
+  let defaultAsyncLimit = configs.asyncLimit || settings.configs.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (scenarios.length > 0) {
 
@@ -154,7 +164,7 @@ const getEnvar = (varName, settings) => {
   if (regex.test(envarValue)) {
     let envarMatch = envarValue.match(regex);
     if (envarMatch && envarMatch.length > 0) {
-      let currentEnvironment = settings.defaults.env || process.env.NODE_ENV;
+      let currentEnvironment = settings.configs.env || process.env.NODE_ENV;
       envarValue = settings.environments[currentEnvironment][envarMatch[0].trim()];
     }
   }
@@ -184,11 +194,11 @@ const executeScenario = async (scenarioProperties) => {
   // --- SEND REQUEST ---
   let actualResponse;
   try {
-    let defaultUrl = configs.baseUrl || settings.defaults.baseUrl;
+    let defaultUrl = configs.baseUrl || settings.configs.baseUrl;
     let baseUrl = getEnvar(defaultUrl, settings);
     let urlPath = scenario.request.url || configs.defaultEndpoint;
     let url = baseUrl + urlPath;
-    let method = scenario.request.method || configs.defaultMethod || settings.defaults.method || DEFAULT_METHOD;
+    let method = scenario.request.method || configs.defaultMethod || settings.configs.method || DEFAULT_METHOD;
 
     const res = await axios({
       url: url,
