@@ -1,6 +1,6 @@
 const customValidation = (field, actualValue, scenario) => {
   let expectedValue = 'Computer, run a level-two diagnostic on warp-drive systems.';
-  if (actualValue === expectedValue) {
+  if (actualValue != expectedValue) {
     scenario.result.state = 'failed';
     scenario.result.context.push({
       message: field.customMessage,
