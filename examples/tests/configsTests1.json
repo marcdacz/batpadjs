@@ -2,9 +2,9 @@
   "name": "Configs Tests 1",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
-    "defaultEndpoint": "/posts",
-    "defaultMethod": "post",    
-    "defaultBodyPath": "data/bodyFromFile.json"
+    "url": "/posts",
+    "method": "post",    
+    "bodyPath": "data/bodyFromFile.json"
   },
   "scenarios": [
     {

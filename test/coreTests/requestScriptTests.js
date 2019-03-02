@@ -17,7 +17,7 @@ describe('Core: RequestScript Tests', () => {
             }
         };
         configs = {
-            defaultBody: {
+            body: {
                 id: 12345,
                 firstName: 'Janna',
                 lastName: 'Cruz'
@@ -25,7 +25,7 @@ describe('Core: RequestScript Tests', () => {
         }
     });
 
-    it('should be able to generate json request using configs.defaultBody', async () => {
+    it('should be able to generate json request using configs.body', async () => {
         await requestScript(scenario, configs);
         expect(scenario.request.body).to.deep.equal({
             id: 12345,
@@ -39,8 +39,8 @@ describe('Core: RequestScript Tests', () => {
         })
     });
 
-    it('should be able to generate json request using configs.defaultBodyPath', async () => {
-        configs.defaultBodyPath = 'examples/data/bodyFromFile.json';
+    it('should be able to generate json request using configs.bodyPath', async () => {
+        configs.bodyPath = 'examples/data/bodyFromFile.json';
 
         await requestScript(scenario, configs);
         expect(scenario.request.body).to.deep.equal({

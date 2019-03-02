@@ -42,7 +42,7 @@ module.exports.runTests = async (opts) => {
     log.warn(`WARNING: Settings file not found!`);
     return;
   }
-  
+
   let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
   let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
   let testSuites = opts.testSuites || fileHelpers.getJsFiles(testSuitesPath).map(testSuite => fileHelpers.requireUncached(testSuite));
@@ -196,14 +196,16 @@ const executeScenario = async (scenarioProperties) => {
   try {
     let defaultUrl = configs.baseUrl || settings.configs.baseUrl;
     let baseUrl = getEnvar(defaultUrl, settings);
-    let urlPath = scenario.request.url || configs.defaultEndpoint;
+    let urlPath = scenario.request.url || configs.url;
     let url = baseUrl + urlPath;
-    let method = scenario.request.method || configs.defaultMethod || settings.configs.method || DEFAULT_METHOD;
+    let method = scenario.request.method || configs.method || settings.configs.method || DEFAULT_METHOD;
+    let headers = scenario.request.header || configs.header || settings.configs.header;
+    let proxy = scenario.request.proxy || configs.proxy || settings.configs.proxy;
 
     const res = await axios({
       url: url,
       method: method,
-      headers: scenario.request.headers,
+      headers: headers,
       params: scenario.request.params,
       data: scenario.request.body,
       timeout: configs.timeout,
@@ -211,7 +213,7 @@ const executeScenario = async (scenarioProperties) => {
       auth: scenario.request.auth,
       xsrfCookieName: scenario.request.xsrfCookieName,
       xsrfHeaderName: scenario.request.xsrfHeaderName,
-      proxy: scenario.request.proxy
+      proxy: proxy
     });
     actualResponse = res;
   } catch (error) {

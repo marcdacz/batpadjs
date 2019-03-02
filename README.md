@@ -12,7 +12,7 @@ Then you came at the right place!
 
 ### Introducing BatPadJS
 
-Create Automated REST API Tests in seconds using BatPadJS. It even features an easy to use CLI that allows you to initialise a project, create test suites and scripts. It also comes with built-in features that generates JSON request data dynamically as well as validate response data in a declarative, specification-based approach.
+Create Automated API Tests in seconds using BatPadJS. It even features an easy to use CLI that allows you to initialise a project, create test suites and scripts. It also comes with built-in features that generates JSON request data dynamically as well as validate response data in a declarative, specification-based approach.
 
 ## Getting Started
 ### Installing
@@ -63,9 +63,9 @@ batpad gen aftercript --name SomeName
   name: "Sample Test Suite",
   configs: {
     baseUrl: "{{baseUrl}}",
-    defaultEndpoint: "/posts",
-    defaultMethod: "post",  
-    defaultBody: {     
+    url: "/posts",
+    method: "post",  
+    body: {     
       "title": "Make It So",
       "body": "To Boldly Go Where No Tester Has Gone Before..."
     }, 
@@ -106,10 +106,12 @@ See more [Examples](https://github.com/marcdacz/BatPadJS/tree/master/examples)
 
 ```
 baseUrl - Sets the base url to be used in the test suite
-defaultEndpoint - Sets a default endpoint
-defaultMethod - Sets the default REST method
-defaultBody - Sets the default JSON Body for use in the test scenarios
-defaultBodyPath - Sets the default JSON Body File Path for use in the test scenarios
+url - Sets a default endpoint
+method - Sets the default REST method
+header - Sets the default Header
+proxy - Sets the default Proxy
+body - Sets the default JSON Body for use in the test scenarios
+bodyPath - Sets the default JSON Body File Path for use in the test scenarios
 beforeAllScript - Sets the beforeAllScript path inside the scripts folder
 beforeEachScript - Sets the beforeEachScript path inside the scrips folder
 afterEachScript - Sets the afterEachScript path inside the scripts folder
@@ -127,16 +129,14 @@ expected - Sets the Expected Results
 **Request**
 ```
 url - Sets the endpoint to be used in the scenario
-method - Sets the REST method for the scenario. Overrides the defaultMethod from the Configs
-headers - Sets the Request Headers
-params - Sets the Request Parameters
-body - Sets the Request Body JSON
-bodyPath - Sets the Request Body JSON File Path. Overrides the defaultBodyPath from the configs
+method - Sets the REST method for the scenario (overrides configs)
+headers - Sets the Request Headers for the scenario (overrides configs)
+proxy - Sets the Request Proxy for the scenario (overrides configs)
+params - Sets the Request Parameters for the scenario 
+body - Sets the Request Body JSON for the scenario (overrides configs)
+bodyPath - Sets the Request Body JSON File Path for the scenario (overrides configs)
 fields - An array of JSON paths and their corresponding values you want to insert or update
 ```
-
-Note:
-_scenario.request.body_ overrides _scenario.request.bodyPath_ overrides _configs.defaultBodyPath_ overrides _configs.defaultBody_ 
 
 **Expected**
 ```
@@ -157,6 +157,17 @@ data - Sets the expected data where you specify the JSON path and the Validation
     "env": "dev",
     "baseUrl": "{{baseUrl}}",
     "method": "get",
+    "headers": {
+      "authorization": "Bearer token"
+    },
+    "proxy": {
+      "host": "127.0.0.1",
+      "port": 9000,
+      "auth": {
+        "username": "marcDacz",
+        "password": "password"
+      }
+    },
     "asyncLimit": 2,
     "delay": 0,
     "beforeAllScript": "beforeAllScript.js",
