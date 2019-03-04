@@ -1,5 +1,4 @@
 describe('Core: RequestScript Tests', () => {
-    const sinon = require('sinon');
     const chai = require('chai');
     const expect = chai.expect;
     const requestScript = require('../../core/requestScript');
