@@ -194,7 +194,8 @@ environments - Contains Environment Variables
 ```
 ### Additional Features
 
-####JSON Builder
+**JSON Builder**
+
 By installing BatPadJS locally, you can utilise its built-in JSON Builder:
 ```
 let JsonBuilder = require('batpadjs').JsonBuilder;
