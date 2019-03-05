@@ -193,7 +193,8 @@ configs - Global Configuration to specify default values for environment, baseUr
 environments - Contains Environment Variables
 ```
 ### Additional Features
-_JSON Builder_
+
+####JSON Builder
 By installing BatPadJS locally, you can utilise its built-in JSON Builder:
 ```
 let JsonBuilder = require('batpadjs').JsonBuilder;
@@ -202,6 +203,7 @@ configs.body = new JsonBuilder()
   .set('$.body', 'To Boldly Go Where No Tester Has Gone Before...')
   .get('$');
 ```
+
 ## Development
 ```
 npm install 
