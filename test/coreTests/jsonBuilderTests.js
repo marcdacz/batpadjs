@@ -1,4 +1,4 @@
-describe.only('Core: JsonBuilder Tests', () => {
+describe('Core: JsonBuilder Tests', () => {
   const chai = require('chai');
   const expect = chai.expect;
   const JsonBuilder = require('../../core/jsonBuilder');

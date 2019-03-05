@@ -1,4 +1,4 @@
-const jsonpath = require('jsonpath');
+const JsonBuilder = require('./jsonBuilder');
 const { isJson } = require('./fileHelpers');
 
 module.exports = async (scenario, actualResponse, configs) => {
@@ -49,7 +49,8 @@ module.exports = async (scenario, actualResponse, configs) => {
           let actualValue = actualResponse.data;
           
           if (dataField.path && isJson(actualResponse.data)) {
-            actualValue = jsonpath.value(actualResponse.data, dataField.path);
+            let jb = new JsonBuilder(actualResponse.data);
+            actualValue = jb.get(dataField.path);
           }
 
           // Equals

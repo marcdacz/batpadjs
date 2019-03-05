@@ -1,5 +1,8 @@
-module.exports = async (testProperties) => {  
+module.exports = async (testProperties) => {
   let configs = testProperties.configs;
-  configs.body.title = "Using Default Body Title from Configs updated in BeforeAll script";
-  configs.body.body = "Using Default Body Data from Configs updated in BeforeAll script";
+  let JsonBuilder = require('../../core').JsonBuilder;
+  configs.body = new JsonBuilder()
+    .set('$.title', 'Using Default Body Title from Configs updated in BeforeAll script')
+    .set('$.body', 'Using Default Body Title from Configs updated in BeforeAll script')
+    .get('$');
 };

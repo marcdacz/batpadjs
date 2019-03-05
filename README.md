@@ -192,6 +192,16 @@ paths - Here we specify the paths for tests, scripts, reports, etc.
 configs - Global Configuration to specify default values for environment, baseUrl, etc. Also provides scripts to run Before/After all test suites run
 environments - Contains Environment Variables
 ```
+### Additional Features
+_JSON Builder_
+By installing BatPadJS locally, you can utilise its built-in JSON Builder:
+```
+let JsonBuilder = require('batpadjs').JsonBuilder;
+configs.body = new JsonBuilder()
+  .set('$.title', 'Beam Me Up, Scotty')
+  .set('$.body', 'To Boldly Go Where No Tester Has Gone Before...')
+  .get('$');
+```
 ## Development
 ```
 npm install 

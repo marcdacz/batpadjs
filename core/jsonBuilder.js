@@ -1,5 +1,5 @@
-import jsonpath from 'jsonpath';
-import fs from 'fs';
+const jsonpath = require('jsonpath');
+const fs = require('fs');
 
 module.exports = class JsonBuilder {
   constructor(json) {
