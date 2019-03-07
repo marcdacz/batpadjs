@@ -83,7 +83,11 @@ module.exports.runTests = async (opts) => {
 
     // --- AFTER ALL SCRIPT ---
     await runScript(settingsConfigs.afterAllScript, { settings: settings, reporter: reporter });
-  }
+
+    if (reporter.test && reporter.test.result.state === 'failed'){
+      process.exitCode = 1;
+    }
+  }  
 };
 
 const displayOverallTestResult = (reporter) => {
