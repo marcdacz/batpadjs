@@ -20,7 +20,8 @@ const DEFAULT_ASYNC_LIMIT = 1;
 const runScript = async (script, testObject) => {
   if (script) {
     let settings = testObject.settings;
-    let scriptsPath = settings.paths.scripts || DEFAULT_SCRIPTS_PATH;
+    let settingsPath = settings.paths || {};
+    let scriptsPath = settingsPath.scripts || DEFAULT_SCRIPTS_PATH;
     let scriptResolvedPath = resolve(join(scriptsPath, script));
     if (fs.existsSync(scriptResolvedPath)) {
       try {
@@ -44,7 +45,10 @@ module.exports.runTests = async (opts) => {
   }
 
   let settings = fileHelpers.requireUncached(DEFAULT_SETTINGS_FILE);
-  let testSuitesPath = settings.paths.tests || DEFAULT_TESTS_PATH;
+  let settingsPath = settings.paths || {};
+  let settingsConfigs = settings.configs || {};
+
+  let testSuitesPath = settingsPath.tests || DEFAULT_TESTS_PATH;
   let testSuites = opts.testSuites || fileHelpers.getJsFiles(testSuitesPath).map(testSuite => fileHelpers.requireUncached(testSuite));
 
   if (testSuites && testSuites.length > 0) {
@@ -54,7 +58,7 @@ module.exports.runTests = async (opts) => {
     }
 
     // --- BEFORE ALL SCRIPT ---
-    await runScript(settings.configs.beforeAllScript, { settings: settings, reporter: reporter });
+    await runScript(settingsConfigs.beforeAllScript, { settings: settings, reporter: reporter });
 
     // --- EXECUTE SUITE ---
     await Promise.all(testSuites.map(throat(DEFAULT_ASYNC_LIMIT, testSuite => {
@@ -78,7 +82,7 @@ module.exports.runTests = async (opts) => {
     displayOverallTestResult(reporter);
 
     // --- AFTER ALL SCRIPT ---
-    await runScript(settings.configs.afterAllScript, { settings: settings, reporter: reporter });
+    await runScript(settingsConfigs.afterAllScript, { settings: settings, reporter: reporter });
   }
 };
 
@@ -118,11 +122,8 @@ const executeSuite = async (suiteProperties) => {
   let testFilter = suiteProperties.testFilter;
   let reporter = suiteProperties.reporter;
   let settings = suiteProperties.settings;
-
-  let configs = {};
-  if (testSuite.configs) {
-    configs = testSuite.configs;
-  }
+  let settingsConfigs = settings.configs || {};
+  let configs = testSuite.configs || {};
 
   const scenarios = testSuite.scenarios.filter(scenario => {
     if (scenario.test) {
@@ -130,8 +131,8 @@ const executeSuite = async (suiteProperties) => {
     }
   });
 
-  let defaultDelay = configs.delay || settings.configs.delay || DEFAULT_DELAY;
-  let defaultAsyncLimit = configs.asyncLimit || settings.configs.asyncLimit || DEFAULT_ASYNC_LIMIT;
+  let defaultDelay = configs.delay || settingsConfigs.delay || DEFAULT_DELAY;
+  let defaultAsyncLimit = configs.asyncLimit || settingsConfigs.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (scenarios.length > 0) {
 
@@ -159,12 +160,13 @@ const executeSuite = async (suiteProperties) => {
 }
 
 const getEnvar = (varName, settings) => {
+  let settingsConfigs = settings.configs || {};
   const regex = new RegExp('(?<={{)(.*)(?=}})');
   let envarValue = varName;
   if (regex.test(envarValue)) {
     let envarMatch = envarValue.match(regex);
     if (envarMatch && envarMatch.length > 0) {
-      let currentEnvironment = settings.configs.env || process.env.NODE_ENV;
+      let currentEnvironment = settingsConfigs.env || process.env.NODE_ENV;
       envarValue = settings.environments[currentEnvironment][envarMatch[0].trim()];
     }
   }
@@ -176,6 +178,7 @@ const executeScenario = async (scenarioProperties) => {
   let configs = scenarioProperties.configs;
   let reporter = scenarioProperties.reporter;
   let settings = scenarioProperties.settings;
+  let settingsConfigs = settings.configs || {};
 
   scenario.request = scenario.request ? scenario.request : {};
   scenario.request.fields = scenario.request.fields ? scenario.request.fields : [];
@@ -194,13 +197,13 @@ const executeScenario = async (scenarioProperties) => {
   // --- SEND REQUEST ---
   let actualResponse;
   try {
-    let defaultUrl = configs.baseUrl || settings.configs.baseUrl;
+    let defaultUrl = configs.baseUrl || settingsConfigs.baseUrl;
     let baseUrl = getEnvar(defaultUrl, settings);
     let urlPath = scenario.request.url || configs.url;
     let url = baseUrl + urlPath;
-    let method = scenario.request.method || configs.method || settings.configs.method || DEFAULT_METHOD;
-    let headers = scenario.request.header || configs.header || settings.configs.header;
-    let proxy = scenario.request.proxy || configs.proxy || settings.configs.proxy;
+    let method = scenario.request.method || configs.method || settingsConfigs.method || DEFAULT_METHOD;
+    let headers = scenario.request.header || configs.header || settingsConfigs.header;
+    let proxy = scenario.request.proxy || configs.proxy || settingsConfigs.proxy;
 
     const res = await axios({
       url: url,

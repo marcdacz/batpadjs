@@ -47,7 +47,7 @@ module.exports = async (scenario, actualResponse, configs) => {
       for (const dataField of expectedResponse.data) {
         if (actualResponse.data) {
           let actualValue = actualResponse.data;
-          
+
           if (dataField.path && isJson(actualResponse.data)) {
             let jb = new JsonBuilder(actualResponse.data);
             actualValue = jb.get(dataField.path);
@@ -69,8 +69,18 @@ module.exports = async (scenario, actualResponse, configs) => {
 
           // Contains
           if (dataField.contains) {
-            let regex = RegExp(dataField.contains, 'i');
-            if (!regex.test(actualValue)) {
+            let isFailed = false;
+            if (actualValue instanceof Array) {
+              if (!actualValue.includes(dataField.contains)) {
+                isFailed = true;
+              }
+            } else {
+              let regex = RegExp(dataField.contains, 'i');
+              if (!regex.test(actualValue)) {
+                isFailed = true;
+              }
+            }
+            if (isFailed) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
                 error: "Field value is incorrect!",
@@ -83,8 +93,18 @@ module.exports = async (scenario, actualResponse, configs) => {
 
           // NotContains
           if (dataField.notcontains) {
-            let regex = RegExp(dataField.notcontains, 'i');
-            if (regex.test(actualValue)) {
+            let isFailed = false;
+            if (actualValue instanceof Array) {
+              if (actualValue.includes(dataField.notcontains)) {
+                isFailed = true;
+              }
+            } else {
+              let regex = RegExp(dataField.notcontains, 'i');
+              if (regex.test(actualValue)) {
+                isFailed = true;
+              }
+            }
+            if (isFailed) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
                 error: "Field value is incorrect!",

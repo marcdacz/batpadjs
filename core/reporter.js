@@ -30,7 +30,8 @@ module.exports = class Reporter {
     this.test.result.passPercentage = (this.test.result.totalPassedTestCount * 100 / this.test.result.totalTestCount).toFixed(2) + '%';
     this.test.result.state = this.test.result.totalFailedTestCount > 0 ? 'failed' : 'passed';
 
-    const reportPath = this.settings.paths.reports || 'reports';
+    let settingsPath = this.settings.paths || {};    
+    const reportPath = settingsPath.reports || 'reports';
     const reportFilename = join(process.cwd(), reportPath, 'testReport.json');
     fileHelpers.ensureDirectoryPath(reportFilename);
     fs.writeFileSync(reportFilename, JSON.stringify(this.test, null, 2));

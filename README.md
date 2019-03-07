@@ -142,7 +142,74 @@ fields - An array of JSON paths and their corresponding values you want to inser
 ```
 status - Sets the expected status code
 statusText - Sets the expected status text
-data - Sets the expected data where you specify the JSON path and the Validation Method such as equals, contains or notcontains as well as having a callback for customValidation method. You can also add custom properties you can use in the callback function!
+data - Sets the expected data where you specify the JSON path and your assetions
+```
+
+**Available Assertions**
+```
+# Example Actual API Response:
+data: {
+        title: 'Live Long and Prosper',
+        body: 'Computer, run a level-two diagnostic on warp-drive systems.',
+        tags: [ 'startrek', 'spock', 'enterprise']
+}
+```
+1. equals - Asserts if actual value is equal to expected value.
+```
+# scenario.expected.data
+data: [
+        { path: '$.title', equals: 'Live Long and Prosper' }
+]
+```
+
+2. contains - If actual value is _STRING_ then asserts if it contains expected string. If actual value is _ARRAY_ then asserts if array contains expected object.
+```
+# scenario.expected.data
+data: [
+        { path: '$.body', contains: 'computer' },
+        { path: '$.tags', contains: 'startrek' }
+]
+```
+
+3. notcontains - If actual value is _STRING_ then asserts if it does not contain expected string. If actual value is _ARRAY_ then asserts if array does not contain expected object.
+```
+# scenario.expected.data
+data: [
+        { path: '$.body', notcontains: 'macintosh' },
+        { path: '$.tags', notcontains: 'starwars' }
+]
+```
+
+4. callback - Allows users to call a specified function for custom validation. Do note that you can add your own properties in the _scenario.expected.data array_ which you can also utilise in your own custom validation.
+```
+# test.js
+const { customValidation } = require('../scripts/customValidation');
+.
+.
+.
+# scenario.expected.data
+data: [
+        { path: "$.body", callback: customValidation, customMessage: "This test has failed. ;-(" }
+]
+
+
+# customValidation.js
+const customValidation = (field, actualValue, scenario) => {
+  let expectedValue = 'Computer, run a level-two diagnostic on warp-drive systems.';
+  if (actualValue != expectedValue) {
+    scenario.result.state = 'failed';
+    scenario.result.context.push({
+      message: field.customMessage,
+      path: field.path,
+      actual: actualValue,
+      expected: expectedValue
+    });
+  }
+};
+
+module.exports = {
+  customValidation
+}
 ```
 
 ### Global Settings (settings.json)
