@@ -266,10 +266,18 @@ environments - Contains Environment Variables
 By installing BatPadJS locally, you can utilise its built-in JSON Builder:
 ```
 let JsonBuilder = require('batpadjs').JsonBuilder;
+
+// Building a JSON then retrieving the outcome
 configs.body = new JsonBuilder()
   .set('$.title', 'Beam Me Up, Scotty')
   .set('$.body', 'To Boldly Go Where No Tester Has Gone Before...')
   .get('$');
+
+// Building then saving the JSON to a file
+configs.body = new JsonBuilder()
+  .set('$.title', 'Beam Me Up, Scotty')
+  .set('$.body', 'To Boldly Go Where No Tester Has Gone Before...')
+  .save(filename);
 ```
 
 ## Development

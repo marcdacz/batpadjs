@@ -1,6 +1,8 @@
 describe('Core: JsonBuilder Tests', () => {
   const chai = require('chai');
   const expect = chai.expect;
+  const fs = require("fs");
+  const { join } = require('path');
   const JsonBuilder = require('../../core/jsonBuilder');
   let json;
 
@@ -78,5 +80,17 @@ describe('Core: JsonBuilder Tests', () => {
     let jb = new JsonBuilder(json);
     jb.set('$.address', undefined);
     expect(jb.get('$.address')).to.deep.equal(undefined);
+  });
+
+  it.only('should be able to save json', () => {
+    let jsonFileName = join(__dirname, 'base.json');
+    if (fs.existsSync(jsonFileName))
+      fs.unlinkSync(jsonFileName);
+    expect(fs.existsSync(jsonFileName)).to.be.false;
+
+    let jb = new JsonBuilder(json);
+    jb.save(jsonFileName);
+    expect(fs.existsSync(jsonFileName)).to.be.true;
+    fs.unlinkSync(jsonFileName);
   });
 });
