@@ -84,10 +84,10 @@ module.exports.runTests = async (opts) => {
     // --- AFTER ALL SCRIPT ---
     await runScript(settingsConfigs.afterAllScript, { settings: settings, reporter: reporter });
 
-    if (reporter.test && reporter.test.result.state === 'failed'){
+    if (reporter.test && reporter.test.result.state === 'failed') {
       process.exitCode = 1;
     }
-  }  
+  }
 };
 
 const displayOverallTestResult = (reporter) => {
@@ -242,6 +242,11 @@ const executeScenario = async (scenarioProperties) => {
     reporter.setTestRunResult('failed');
     log.failedTestContext(scenario.result.context);
     log.failedTest(scenario.test, scenario.result.duration);
+
+    if (actualResponse.data)
+      scenario.result.context.push({
+        actualResponse: actualResponse.data
+      });
   } else {
     log.passedTest(scenario.test, scenario.result.duration);
   }

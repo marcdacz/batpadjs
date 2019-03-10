@@ -82,7 +82,7 @@ describe('Core: JsonBuilder Tests', () => {
     expect(jb.get('$.address')).to.deep.equal(undefined);
   });
 
-  it.only('should be able to save json', () => {
+  it('should be able to save json', () => {
     let jsonFileName = join(__dirname, 'base.json');
     if (fs.existsSync(jsonFileName))
       fs.unlinkSync(jsonFileName);

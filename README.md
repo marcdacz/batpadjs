@@ -274,7 +274,7 @@ configs.body = new JsonBuilder()
   .get('$');
 
 // Building then saving the JSON to a file
-configs.body = new JsonBuilder()
+new JsonBuilder()
   .set('$.title', 'Beam Me Up, Scotty')
   .set('$.body', 'To Boldly Go Where No Tester Has Gone Before...')
   .save(filename);
@@ -301,6 +301,8 @@ Note: To test the CLI locally, you can use _npm link_ command
 * [moment](https://github.com/moment/moment) - Used for Date and Time stuff
 * [chalk](https://github.com/chalk/chalk) - Made the logging colorful
 * [shelljs](https://github.com/shelljs/shelljs) - Cross Environment Shell
+* [junit-report-builder](https://github.com/davidparsson/junit-report-builder) - Generates JUnit Report
+* [xunit-viewer](https://github.com/lukejpreston/xunit-viewer) - Generates HTML Report
 
 ### Authors
 
