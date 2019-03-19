@@ -52,16 +52,33 @@ module.exports = class Reporter {
     this.test.suites.push(testSuite);
 
     let suite = builder.testSuite().name(testSuite.name)
-    if (testSuite.configs){
-      suite.property('configs', JSON.stringify(testSuite.configs, null, 2));
-    }     
+    if (testSuite.configs) {
+      let configs = testSuite.configs;
+      if (configs.baseUrl) suite.property('baseUrl', configs.baseUrl);
+      if (configs.url) suite.property('url', configs.url);
+      if (configs.method) suite.property('method', configs.method);
+      if (configs.header) suite.property('header', configs.header);
+      if (configs.proxy) suite.property('proxy', configs.proxy);
+      if (configs.body) suite.property('body', JSON.stringify(configs.body, null, 2));
+      if (configs.bodyPath) suite.property('bodyPath', configs.bodyPath);
+      if (configs.beforeAllScript) suite.property('beforeAllScript', configs.beforeAllScript);
+      if (configs.beforeEachScript) suite.property('beforeEachScript', configs.beforeEachScript);
+      if (configs.afterEachScript) suite.property('afterEachScript', configs.afterEachScript);
+      if (configs.afterAllScript) suite.property('afterAllScript', configs.afterAllScript);
+    }
 
     testSuite.scenarios.map(scenario => {
       let testCase = suite.testCase().className('scenario.test').name(scenario.test).time(scenario.result.duration);
-      testCase.standardOutput(JSON.stringify(scenario, null, 2));
-
+      let testCaseData = {
+        requestBody: scenario.request.body || undefined,
+        expected: scenario.expected || undefined,
+        responseData: scenario.result.actualResponse || undefined,
+        responseStatus: scenario.result.actualResponseStatus || undefined,
+        resultContext: scenario.result.context || undefined
+      };
+      testCase.standardOutput(JSON.stringify(testCaseData, null, 2));
       if (scenario.result.state === "failed") {
-        testCase.failure(JSON.stringify(scenario.result.context, null, 2));
+        testCase.failure(JSON.stringify(testCaseData, null, 2));
       }
     })
   }

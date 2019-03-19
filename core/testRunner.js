@@ -238,15 +238,13 @@ const executeScenario = async (scenarioProperties) => {
 
   scenario.result.end = moment();
   scenario.result.duration = timeHelpers.getDuration(scenario.result.start, scenario.result.end);
+  scenario.result.actualResponse = actualResponse.data;
+  scenario.result.actualResponseStatus = actualResponse.status;
+
   if (scenario.result.state === 'failed') {
     reporter.setTestRunResult('failed');
     log.failedTestContext(scenario.result.context);
     log.failedTest(scenario.test, scenario.result.duration);
-
-    if (actualResponse.data)
-      scenario.result.context.push({
-        actualResponse: actualResponse.data
-      });
   } else {
     log.passedTest(scenario.test, scenario.result.duration);
   }
