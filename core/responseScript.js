@@ -56,6 +56,21 @@ module.exports = async (scenario, actualResponse, configs) => {
           // Equals
           if (dataField.equals) {
             let expectedValue = dataField.equals;
+            if (actualValue != expectedValue) {
+              scenario.result.state = 'failed';
+              scenario.result.context.push({
+                error: "Field value is incorrect!",
+                path: dataField.path,
+                actual: actualValue,
+                expected: expectedValue,
+                remarks: dataField.remarks
+              });
+            }
+          }
+
+          // Deep Equals
+          if (dataField.deepEquals) {
+            let expectedValue = dataField.deepEquals;
             if (actualValue !== expectedValue) {
               scenario.result.state = 'failed';
               scenario.result.context.push({
