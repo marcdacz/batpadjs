@@ -112,11 +112,11 @@ describe('Core: ResponseScript Tests', () => {
   it('should validate expected data - failed', async () => {
     scenario.expected = {
       data: [
-        { path: '$.title', equals: 'Lives Long and Prosper' },
-        { path: '$.body', contains: 'macintosh' },
-        { path: '$.body', notcontains: 'computer' },
-        { path: '$.tags', contains: 'starwars' },
-        { path: '$.tags', notcontains: 'spock' }
+        { path: '$.title', equals: 'Lives Long and Prosper', remarks: 'DEFECT-001' },
+        { path: '$.body', contains: 'macintosh', remarks: 'DEFECT-001' },
+        { path: '$.body', notcontains: 'computer', remarks: 'DEFECT-001' },
+        { path: '$.tags', contains: 'starwars', remarks: 'DEFECT-001' },
+        { path: '$.tags', notcontains: 'spock', remarks: 'DEFECT-001' }
       ]
     };
     let actualResponse = {
@@ -133,31 +133,36 @@ describe('Core: ResponseScript Tests', () => {
       error: 'Field value is incorrect!',
       path: '$.title',
       actual: 'Live Long and Prosper',
-      expected: 'Lives Long and Prosper'
+      expected: 'Lives Long and Prosper',
+      remarks: 'DEFECT-001'
     });
     expect(scenario.result.context).to.deep.include({
       error: 'Field value is incorrect!',
       path: '$.body',
       actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
-      contains: 'macintosh'
+      contains: 'macintosh',
+      remarks: 'DEFECT-001'      
     });
     expect(scenario.result.context).to.deep.include({
       error: 'Field value is incorrect!',
       path: '$.body',
       actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
-      notcontains: 'computer'
+      notcontains: 'computer',
+      remarks: 'DEFECT-001'
     });
     expect(scenario.result.context).to.deep.include({
       error: 'Field value is incorrect!',
       path: '$.tags',
       actual: ['startrek', 'spock', 'enterprise'],
-      contains: 'starwars'
+      contains: 'starwars',
+      remarks: 'DEFECT-001'
     });
     expect(scenario.result.context).to.deep.include({
       error: 'Field value is incorrect!',
       path: '$.tags',
       actual: ['startrek', 'spock', 'enterprise'],
-      notcontains: 'spock'
+      notcontains: 'spock',
+      remarks: 'DEFECT-001'
     });
   });
 

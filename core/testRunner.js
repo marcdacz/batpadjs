@@ -35,7 +35,7 @@ const runScript = async (script, testObject) => {
   }
 };
 
-module.exports.runTests = async (opts) => {
+const runTests = async (opts) => {
   opts = opts ? opts : {};
   let testFilter = opts.filter || DEFAULT_TESTS_FILTER;
 
@@ -58,15 +58,14 @@ module.exports.runTests = async (opts) => {
     }
 
     // --- BEFORE ALL SCRIPT ---
-    await runScript(settingsConfigs.beforeAllScript, { settings: settings, reporter: reporter });
+    await runScript(settingsConfigs.beforeAllScript, { settings: settings, testSuites: testSuites, reporter: reporter });
 
     // --- EXECUTE SUITE ---
     await Promise.all(testSuites.map(throat(DEFAULT_ASYNC_LIMIT, testSuite => {
-      // let testSuite = fileHelpers.requireUncached(testSuite);
       if (testSuite.name && testSuite.scenarios) {
         return new Promise(function(resolve, reject) {
           setTimeout(() =>
-            resolve(executeSuite({
+            resolve(runTestSuite({
               testSuite: testSuite,
               testFilter: testFilter,
               reporter: reporter,
@@ -75,14 +74,14 @@ module.exports.runTests = async (opts) => {
             DEFAULT_DELAY);
         });
       }
-    })));
+    })));    
+
+    // --- AFTER ALL SCRIPT ---
+    await runScript(settingsConfigs.afterAllScript, { settings: settings, testSuites: testSuites, reporter: reporter });
 
     // --- SAVE TEST REPORT ---  
     reporter.saveTestRunReport();
     displayOverallTestResult(reporter);
-
-    // --- AFTER ALL SCRIPT ---
-    await runScript(settingsConfigs.afterAllScript, { settings: settings, reporter: reporter });
 
     if (reporter.test && reporter.test.result.state === 'failed') {
       process.exitCode = 1;
@@ -121,11 +120,11 @@ const displayOverallTestResult = (reporter) => {
   }
 }
 
-const executeSuite = async (suiteProperties) => {
+const runTestSuite = async (suiteProperties) => {
   let testSuite = suiteProperties.testSuite;
   let testFilter = suiteProperties.testFilter;
   let reporter = suiteProperties.reporter;
-  let settings = suiteProperties.settings;
+  let settings = suiteProperties.settings || {};
   let settingsConfigs = settings.configs || {};
   let configs = testSuite.configs || {};
 
@@ -143,11 +142,11 @@ const executeSuite = async (suiteProperties) => {
     log.info(testSuite.name);
 
     // --- BEFORE ALL SCRIPT ---
-    await runScript(configs.beforeAllScript, { configs: configs, settings: settings });
+    await runScript(configs.beforeAllScript, { configs: configs, testSuite: testSuite, reporter: reporter,  settings: settings });
 
     // --- EXECUTE SCENARIO ---
     await Promise.all(scenarios.map(throat(defaultAsyncLimit, scenario => new Promise((resolve, reject) => {
-      setTimeout(() => resolve(executeScenario({
+      setTimeout(() => resolve(runScenario({
         scenario: scenario,
         configs: configs,
         reporter: reporter,
@@ -156,7 +155,7 @@ const executeSuite = async (suiteProperties) => {
     }))));
 
     // --- AFTER ALL SCRIPT ---
-    await runScript(configs.afterAllScript, { configs: configs, settings: settings });
+    await runScript(configs.afterAllScript, { configs: configs, testSuite: testSuite, reporter: reporter, settings: settings });
 
     // --- TEST REPORT ---
     reporter.addTest(testSuite);
@@ -177,7 +176,7 @@ const getEnvar = (varName, settings) => {
   return envarValue;
 }
 
-const executeScenario = async (scenarioProperties) => {
+const runScenario = async (scenarioProperties) => {
   let scenario = scenarioProperties.scenario;
   let configs = scenarioProperties.configs;
   let reporter = scenarioProperties.reporter;
@@ -206,7 +205,7 @@ const executeScenario = async (scenarioProperties) => {
     let urlPath = scenario.request.url || configs.url;
     let url = baseUrl + urlPath;
     let method = scenario.request.method || configs.method || settingsConfigs.method || DEFAULT_METHOD;
-    let headers = scenario.request.header || configs.header || settingsConfigs.header;
+    let headers = scenario.request.headers || configs.headers || settingsConfigs.headers;
     let proxy = scenario.request.proxy || configs.proxy || settingsConfigs.proxy;
 
     const res = await axios({
@@ -249,3 +248,8 @@ const executeScenario = async (scenarioProperties) => {
     log.passedTest(scenario.test, scenario.result.duration);
   }
 };
+
+module.exports = {
+  runTests,
+  runTestSuite
+}

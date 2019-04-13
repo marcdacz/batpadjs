@@ -62,7 +62,8 @@ module.exports = async (scenario, actualResponse, configs) => {
                 error: "Field value is incorrect!",
                 path: dataField.path,
                 actual: actualValue,
-                expected: expectedValue
+                expected: expectedValue,
+                remarks: dataField.remarks
               });
             }
           }
@@ -86,7 +87,8 @@ module.exports = async (scenario, actualResponse, configs) => {
                 error: "Field value is incorrect!",
                 path: dataField.path,
                 actual: actualValue,
-                contains: dataField.contains
+                contains: dataField.contains,
+                remarks: dataField.remarks
               });
             }
           }
@@ -110,7 +112,8 @@ module.exports = async (scenario, actualResponse, configs) => {
                 error: "Field value is incorrect!",
                 path: dataField.path,
                 actual: actualValue,
-                notcontains: dataField.notcontains
+                notcontains: dataField.notcontains,
+                remarks: dataField.remarks
               });
             }
           }
