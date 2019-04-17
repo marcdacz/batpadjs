@@ -14,7 +14,7 @@ const scenarioGenerator = () => {
     scenarios.push({
       test: `Status: ${combo.status}`,
       request: {
-        url: `/${combo.status}`,
+        urlPath: `/${combo.status}`,
         method: "get",
         headers: {
           Accept: 'application/json'

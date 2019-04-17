@@ -13,7 +13,7 @@ module.exports = {
       beforeScript: "beforeScript.js",
       afterScript: "afterScript.js",
       request: {
-        url: "/posts",
+        urlPath: "/posts",
         method: "post",
         bodyPath: "data/bodyFromFile.json",
         fields: [

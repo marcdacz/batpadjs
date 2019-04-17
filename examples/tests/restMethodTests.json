@@ -7,7 +7,7 @@
     {
       "test": "GET Method ",
       "request": {
-        "url": "/users/1/albums",
+        "urlPath": "/users/1/albums",
         "method": "get"
       },
       "expected": {
@@ -20,7 +20,7 @@
     {
       "test": "POST Method",
       "request": {
-        "url": "/posts",
+        "urlPath": "/posts",
         "method": "post",
         "body": {
           "title": "Testing Post Method",
@@ -37,7 +37,7 @@
     {
       "test": "PUT Method",
       "request": {
-        "url": "/posts/1",
+        "urlPath": "/posts/1",
         "method": "put",
         "body": {
           "id": 1,
@@ -56,7 +56,7 @@
     {
       "test": "PATCH Method",
       "request": {
-        "url": "/posts/1",
+        "urlPath": "/posts/1",
         "method": "patch",
         "body": {
           "title": "Testing Patch Method",
@@ -73,7 +73,7 @@
     {
       "test": "DELETE Method",
       "request": {
-        "url": "/posts/1",
+        "urlPath": "/posts/1",
         "method": "delete"
       },
       "expected": {

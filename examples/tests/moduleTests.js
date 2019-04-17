@@ -9,7 +9,7 @@ module.exports = {
     {
       test: "JS Module as a Test",
       request: {
-        url: "/posts",
+        urlPath: "/posts",
         method: "post",
         bodyPath: "data/bodyFromFile.json"
       },

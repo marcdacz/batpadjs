@@ -36,10 +36,10 @@ module.exports = class Reporter {
     const reportPath = settingsPath.reports || 'reports';
     const reportFilename = join(process.cwd(), reportPath, 'testReport.json');
     fileHelpers.ensureDirectoryPath(reportFilename);
-    fs.writeFileSync(reportFilename, JSON.stringify(this.test, null, 2));
+    // fs.writeFileSync(reportFilename, JSON.stringify(this.test, null, 2));
 
-    let junitReportXml = join(process.cwd(), reportPath, 'junitReport.xml');
-    let junitReportHtml = join(process.cwd(), reportPath, 'junitReport.html');
+    let junitReportXml = join(process.cwd(), reportPath, 'report.xml');
+    let junitReportHtml = join(process.cwd(), reportPath, 'report.html');
     builder.writeTo(junitReportXml);
     xunitViewer({
       results: junitReportXml,

@@ -1,7 +1,7 @@
 {
   "name": "Scripts Tests 2",
   "configs": {
-    "url": "/posts",
+    "urlPath": "/posts",
     "method": "post",  
     "body": {
       "id": 123456,

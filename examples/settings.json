@@ -10,7 +10,8 @@
     "method": "get",
     "asyncLimit": 2,
     "delay": 0,
-    "afterAllScript": "afterEverythingScript.js"
+    "afterAllScript": "afterEverythingScript.js",
+    "debug": true
   },
   "environments": {
     "dev": {

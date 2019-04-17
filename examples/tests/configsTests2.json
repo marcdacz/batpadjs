@@ -2,7 +2,7 @@
   "name": "Configs Tests 2",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
-    "url": "/posts",
+    "urlPath": "/posts",
     "method": "post",    
     "body": {
       "id": 123456,

@@ -1,4 +1,6 @@
 const axios = require('axios');
+const http = require('http');
+const https = require('https');
 const Promise = require('bluebird');
 const throat = require('throat')(require('bluebird'));
 const fs = require('fs');
@@ -74,7 +76,7 @@ const runTests = async (opts) => {
             DEFAULT_DELAY);
         });
       }
-    })));    
+    })));
 
     // --- AFTER ALL SCRIPT ---
     await runScript(settingsConfigs.afterAllScript, { settings: settings, testSuites: testSuites, reporter: reporter });
@@ -138,11 +140,11 @@ const runTestSuite = async (suiteProperties) => {
   let defaultAsyncLimit = configs.asyncLimit || settingsConfigs.asyncLimit || DEFAULT_ASYNC_LIMIT;
 
   if (scenarios.length > 0) {
-
+    log.lines();
     log.info(testSuite.name);
 
     // --- BEFORE ALL SCRIPT ---
-    await runScript(configs.beforeAllScript, { configs: configs, testSuite: testSuite, reporter: reporter,  settings: settings });
+    await runScript(configs.beforeAllScript, { configs: configs, testSuite: testSuite, reporter: reporter, settings: settings });
 
     // --- EXECUTE SCENARIO ---
     await Promise.all(scenarios.map(throat(defaultAsyncLimit, scenario => new Promise((resolve, reject) => {
@@ -202,11 +204,13 @@ const runScenario = async (scenarioProperties) => {
   try {
     let defaultUrl = configs.baseUrl || settingsConfigs.baseUrl;
     let baseUrl = getEnvar(defaultUrl, settings);
-    let urlPath = scenario.request.url || configs.url;
-    let url = baseUrl + urlPath;
+    let urlPath = scenario.request.urlPath || configs.urlPath;
+    let url = scenario.request.url || baseUrl + urlPath;
     let method = scenario.request.method || configs.method || settingsConfigs.method || DEFAULT_METHOD;
     let headers = scenario.request.headers || configs.headers || settingsConfigs.headers;
     let proxy = scenario.request.proxy || configs.proxy || settingsConfigs.proxy;
+    let httpAgent = scenario.request.httpAgent || configs.httpAgent || settingsConfigs.httpAgent;
+    let httpsAgent = scenario.request.httpsAgent || configs.httpsAgent || settingsConfigs.httpsAgent;
 
     const res = await axios({
       url: url,
@@ -219,10 +223,13 @@ const runScenario = async (scenarioProperties) => {
       auth: scenario.request.auth,
       xsrfCookieName: scenario.request.xsrfCookieName,
       xsrfHeaderName: scenario.request.xsrfHeaderName,
-      proxy: proxy
+      proxy: proxy,
+      httpAgent: httpAgent ? new http.Agent(httpAgent) : undefined,
+      httpsAgent: httpsAgent ? new https.Agent(httpsAgent) : undefined,
     });
     actualResponse = res;
   } catch (error) {
+    scenario.result.error = error;
     if (error.response) {
       actualResponse = error.response;
     }
@@ -237,13 +244,20 @@ const runScenario = async (scenarioProperties) => {
 
   scenario.result.end = moment();
   scenario.result.duration = timeHelpers.getDuration(scenario.result.start, scenario.result.end);
-  scenario.result.actualResponse = actualResponse.data;
-  scenario.result.actualResponseStatus = actualResponse.status;
+
+  if (actualResponse) {
+    scenario.result.actualResponse = actualResponse.data;
+    scenario.result.actualResponseStatus = actualResponse.status;
+  }
 
   if (scenario.result.state === 'failed') {
-    reporter.setTestRunResult('failed');
+    reporter.setTestRunResult('failed');    
+    log.failedTest(scenario.test, scenario.result.duration);  
+    if (settingsConfigs.debug === true && scenario.result.error) {
+      log.error(scenario.result.error);     
+    }
     log.failedTestContext(scenario.result.context);
-    log.failedTest(scenario.test, scenario.result.duration);
+    
   } else {
     log.passedTest(scenario.test, scenario.result.duration);
   }

@@ -34,11 +34,11 @@ const lines = (count = 1) => {
 };
 
 const passedTest = (test, duration) => {
-  log(chalk.green(' \u2713'), chalk.gray(test), chalk.green(`[${duration}]`));
+  log(chalk.green('\u2713'), chalk.gray(test), chalk.green(`[${duration}]`));
 };
 
 const failedTest = (test, duration) => {
-  log(chalk.red(' \u2715'), chalk.gray(test), chalk.red(`[${duration}]`));
+  log(chalk.red('\u2715'), chalk.gray(test), chalk.red(`[${duration}]`));
 };
 
 const failedTestContext = (context) => {

@@ -2,7 +2,7 @@
   "name": "Configs Tests 1",
   "configs": {
     "baseUrl": "https://jsonplaceholder.typicode.com",
-    "url": "/posts",
+    "urlPath": "/posts",
     "method": "post",    
     "bodyPath": "data/bodyFromFile.json"
   },
@@ -48,7 +48,7 @@
     {
       "test": "Using Scenario Method and Endpoint",      
       "request": {
-        "url": "/posts/1",
+        "urlPath": "/posts/1",
         "method": "get"
       },
       "expected": {
