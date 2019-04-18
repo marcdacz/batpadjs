@@ -108,7 +108,7 @@ See more [Examples](https://github.com/marcdacz/BatPadJS/tree/master/examples)
 baseUrl - Sets the base url to be used in the test suite
 url - Sets a default endpoint
 method - Sets the default REST method
-header - Sets the default Header
+headers - Sets the default Header
 proxy - Sets the default Proxy
 body - Sets the default JSON Body for use in the test scenarios
 bodyPath - Sets the default JSON Body File Path for use in the test scenarios
@@ -159,6 +159,14 @@ data: {
 // scenario.expected.data
 data: [
         { path: '$.title', equals: 'Live Long and Prosper' }
+]
+```
+
+**notEquals** - Asserts if actual value is not equal to expected value.
+```
+// scenario.expected.data
+data: [
+        { path: '$.title', notEquals: null }
 ]
 ```
 
