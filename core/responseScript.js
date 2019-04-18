@@ -51,6 +51,21 @@ module.exports = async (scenario, actualResponse, configs) => {
           if (dataField.path && isJson(actualResponse.data)) {
             let jb = new JsonBuilder(actualResponse.data);
             actualValue = jb.get(dataField.path);
+          }          
+
+          // NotEquals
+          if (dataField.notEquals) {
+            let expectedValue = dataField.notEquals;
+            if (actualValue == expectedValue) {
+              scenario.result.state = 'failed';
+              scenario.result.context.push({
+                error: "Field value is incorrect!",
+                path: dataField.path,
+                actual: actualValue,
+                notEquals: expectedValue,
+                remarks: dataField.remarks
+              });
+            }
           }
 
           // Equals
@@ -62,7 +77,7 @@ module.exports = async (scenario, actualResponse, configs) => {
                 error: "Field value is incorrect!",
                 path: dataField.path,
                 actual: actualValue,
-                expected: expectedValue,
+                equals: expectedValue,
                 remarks: dataField.remarks
               });
             }
@@ -77,7 +92,7 @@ module.exports = async (scenario, actualResponse, configs) => {
                 error: "Field value is incorrect!",
                 path: dataField.path,
                 actual: actualValue,
-                expected: expectedValue,
+                deepEquals: expectedValue,
                 remarks: dataField.remarks
               });
             }

@@ -91,6 +91,25 @@ describe('Core: ResponseScript Tests', () => {
     expect(scenario.result.state).to.be.equal('passed');
   });
 
+  it('should validate expected data with nulls - passed', async () => {
+    scenario.expected = {
+      data: [
+        { path: '$.title', equals: null },
+        { path: '$.body', notEquals: null },
+      ]
+    };
+    let actualResponse = {
+      data: {
+        title: null,
+        body: 'Computer, run a level-two diagnostic on warp-drive systems.',
+        tags: ['startrek', 'spock', 'enterprise']
+      }
+    };
+
+    await responseScript(scenario, actualResponse);
+    expect(scenario.result.state).to.be.equal('passed');
+  });
+
   it('should validate expected data inline - passed', async () => {
     scenario.expected = {
       data: [
@@ -113,6 +132,7 @@ describe('Core: ResponseScript Tests', () => {
     scenario.expected = {
       data: [
         { path: '$.title', equals: 'Lives Long and Prosper', remarks: 'DEFECT-001' },
+        { path: '$.title', notEquals: 'Live Long and Prosper', remarks: 'DEFECT-001' },
         { path: '$.body', contains: 'macintosh', remarks: 'DEFECT-001' },
         { path: '$.body', notcontains: 'computer', remarks: 'DEFECT-001' },
         { path: '$.tags', contains: 'starwars', remarks: 'DEFECT-001' },
@@ -133,7 +153,14 @@ describe('Core: ResponseScript Tests', () => {
       error: 'Field value is incorrect!',
       path: '$.title',
       actual: 'Live Long and Prosper',
-      expected: 'Lives Long and Prosper',
+      equals: 'Lives Long and Prosper',
+      remarks: 'DEFECT-001'
+    });
+    expect(scenario.result.context).to.deep.include({
+      error: 'Field value is incorrect!',
+      path: '$.title',
+      actual: 'Live Long and Prosper',
+      notEquals: 'Live Long and Prosper',
       remarks: 'DEFECT-001'
     });
     expect(scenario.result.context).to.deep.include({
@@ -141,7 +168,7 @@ describe('Core: ResponseScript Tests', () => {
       path: '$.body',
       actual: 'Computer, run a level-two diagnostic on warp-drive systems.',
       contains: 'macintosh',
-      remarks: 'DEFECT-001'      
+      remarks: 'DEFECT-001'
     });
     expect(scenario.result.context).to.deep.include({
       error: 'Field value is incorrect!',

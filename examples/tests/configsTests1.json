@@ -73,15 +73,15 @@
       "test": "Updating Json Fields from Default Body Path",
       "request": {
         "fields": [
-          { "path": "$.title", "value": "Updating Default Body from File" },
+          { "path": "$.title", "value": null },
           { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
         ]
       },
       "expected": {
         "status": 201,
         "data": [
-          { "path": "$.title", "equals": "Updating Default Body from File" },
-          { "path": "$.body", "equals": "This test will verify updating json fields from the default one" }
+          { "path": "$.title", "equals": null },
+          { "path": "$.body", "notEquals": null }
         ]
       }
     }
