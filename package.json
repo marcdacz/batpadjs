@@ -9,7 +9,7 @@
         "Test Framework",
         "JSON"
     ],
-    "main": "./core/index.js",
+    "main": ".index.js",
     "bin": {
         "batpad": "./cli/index.js"
     },
