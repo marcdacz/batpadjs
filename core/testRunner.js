@@ -29,7 +29,7 @@ const runScript = async (script, testObject) => {
             try {
                 await require(scriptResolvedPath)(testObject);
             } catch (error) {
-                log.error(`ERROR: ${error}`);
+                log.print(error);
             }
         } else {
             log.warn(`WARNING: Script not found: ${script}`);
