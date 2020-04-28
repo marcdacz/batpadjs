@@ -19,6 +19,8 @@ const DEFAULT_TESTS_FILTER = "^((?!@ignore).)*$";
 const DEFAULT_DELAY = 0;
 const DEFAULT_ASYNC_LIMIT = 1;
 
+let debugFlag = false;
+
 const runScript = async (script, testObject) => {
     if (script) {
         let settings = testObject.settings;
@@ -29,7 +31,7 @@ const runScript = async (script, testObject) => {
             try {
                 await require(scriptResolvedPath)(testObject);
             } catch (error) {
-                log.print(error);
+                log.debug(debugFlag, error);
             }
         } else {
             log.warn(`WARNING: Script not found: ${script}`);
@@ -50,6 +52,7 @@ const runTests = async (opts) => {
     let settings = fileHelpers.requireUncached(settingsFilename);
     let settingsPath = settings.paths || {};
     let settingsConfigs = settings.configs || {};
+    debugFlag = settingsConfigs.debug;
 
     let testSuitesPath = settingsPath.tests || DEFAULT_TESTS_PATH;
     let testSuites =
@@ -101,43 +104,11 @@ const runTests = async (opts) => {
         });
 
         // --- SAVE TEST REPORT ---
-        reporter.saveTestRunReport();
-        displayOverallTestResult(reporter);
+        await reporter.saveTestRunReport();
 
         if (reporter.test && reporter.test.result.state === "failed") {
             process.exitCode = 1;
         }
-    }
-};
-
-const displayOverallTestResult = (reporter) => {
-    if (reporter.test.result.totalTestCount > 0) {
-        log.lines();
-        log.info("------------------------------------------------------------------------------");
-        log.keyValue(`Start:`, `\t\t\t${reporter.test.result.start}`);
-        log.keyValue(`End:`, `\t\t\t${reporter.test.result.end}`);
-        log.keyValue(`Duration:`, `\t\t${reporter.test.result.duration}`);
-        log.keyValue(`Total:`, `\t\t\t${reporter.test.result.totalTestCount}`);
-        log.keyValue(`Passed:`, `\t\t${reporter.test.result.totalPassedTestCount}`);
-        log.keyValue(`Failed:`, `\t\t${reporter.test.result.totalFailedTestCount}`);
-        log.keyValue(`Pass Percentage:`, `\t${reporter.test.result.passPercentage}`);
-        log.info("------------------------------------------------------------------------------");
-
-        log.lines();
-        if (reporter.test.result.state === "passed") {
-            log.info("TEST RUN SUCCESSULLY FINISHED! \uD83D\uDE0E");
-        } else if (reporter.test.result.state === "failed") {
-            log.error("TEST RUN FAILED! \uD83D\uDE22");
-            let count = 1;
-            let failedTests = reporter.getFailedTests();
-            failedTests.map((scenario) => {
-                log.error(`\n${count}. ${scenario.test}`);
-                log.warn(`Test Context:`);
-                log.failedTestContext(scenario.result.context);
-                count++;
-            });
-        }
-        log.lines();
     }
 };
 
@@ -255,7 +226,7 @@ const runScenario = async (scenarioProperties) => {
         let httpAgent = scenario.request.httpAgent || configs.httpAgent || settingsConfigs.httpAgent;
         let httpsAgent = scenario.request.httpsAgent || configs.httpsAgent || settingsConfigs.httpsAgent;
 
-        const res = await axios({
+        let axiosParams = {
             url: url,
             method: method,
             headers: headers,
@@ -269,10 +240,14 @@ const runScenario = async (scenarioProperties) => {
             proxy: proxy,
             httpAgent: httpAgent ? new http.Agent(httpAgent) : undefined,
             httpsAgent: httpsAgent ? new https.Agent(httpsAgent) : undefined,
-        });
+        };
+        log.debug(debugFlag, axiosParams);
+
+        const res = await axios(axiosParams);
         actualResponse = res;
+        // log.debug(debugFlag,actualResponse);
     } catch (error) {
-        scenario.result.error = error;
+        log.debug(debugFlag, error);
         if (error.response) {
             actualResponse = error.response;
         }
@@ -300,9 +275,6 @@ const runScenario = async (scenarioProperties) => {
     if (scenario.result.state === "failed") {
         reporter.setTestRunResult("failed");
         log.failedTest(scenario.test, scenario.result.duration);
-        if (settingsConfigs.debug === true && scenario.result.error) {
-            log.error(scenario.result.error);
-        }
         log.failedTestContext(scenario.result.context);
     } else {
         log.passedTest(scenario.test, scenario.result.duration);

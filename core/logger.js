@@ -2,8 +2,11 @@ const chalk = require("chalk");
 
 const { log } = console;
 
-const print = (message) => {
-    log(message);
+const debug = (debugFlag, message) => {
+    if (debugFlag == true && message) {
+        log("DEBUG MESSAGE:");
+        log(message);
+    }
 };
 
 const warn = (message) => {
@@ -52,7 +55,7 @@ const failedTestContext = (context) => {
 };
 
 module.exports = {
-    print,
+    debug,
     error,
     warn,
     success,

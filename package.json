@@ -1,6 +1,6 @@
 {
     "name": "batpadjs",
-    "version": "1.0.20",
+    "version": "1.0.23",
     "description": "Declarative Specification-based API Test Automation Framework",
     "keywords": [
         "REST API Test",
@@ -9,7 +9,7 @@
         "Test Framework",
         "JSON"
     ],
-    "main": ".index.js",
+    "main": "./index.js",
     "bin": {
         "batpad": "./cli/index.js"
     },
@@ -37,7 +37,7 @@
         "moment": "^2.24.0",
         "shelljs": "^0.8.3",
         "throat": "^4.1.0",
-        "xunit-viewer": "^5.1.8",
+        "xunit-viewer": "^6.2.1",
         "yargs": "^12.0.5"
     },
     "devDependencies": {
