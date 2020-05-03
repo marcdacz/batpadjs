@@ -9,6 +9,14 @@ const debug = (debugFlag, message) => {
     }
 };
 
+const failAndExit = (message) => {
+    if (message) {
+        log("TEST FAILED!");
+        log(message);
+        process.exitCode = 1;
+    }
+};
+
 const warn = (message) => {
     log(chalk.yellow(message));
 };
@@ -66,4 +74,5 @@ module.exports = {
     passedTest,
     failedTest,
     failedTestContext,
+    failAndExit,
 };

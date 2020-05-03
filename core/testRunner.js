@@ -31,7 +31,7 @@ const runScript = async (script, testObject) => {
             try {
                 await require(scriptResolvedPath)(testObject);
             } catch (error) {
-                log.debug(debugFlag, error);
+                log.failAndExit(error);
             }
         } else {
             log.warn(`WARNING: Script not found: ${script}`);
