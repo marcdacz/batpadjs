@@ -28,8 +28,8 @@
       "beforeScript": "beforeScript.js",
       "request": {
         "fields": [
-          { "path": "$.title", "value": "%TITLEID%" },
-          { "path": "$.body", "value": "This test will verify updating json fields" }
+          { "addPath": "$.title", "value": "%TITLEID%" },
+          { "addPath": "$.body", "value": "This test will verify updating json fields" }
         ]
       },
       "expected": {

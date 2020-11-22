@@ -5,7 +5,7 @@ const testCombos = [
   { status: 403, statusText: 'Forbidden'},
   { status: 404, statusText: 'Not Found'},
   { status: 500, statusText: 'Internal Server Error'},
-  { status: 504, statusText: 'Gateway Timeout'}
+  // { status: 504, statusText: 'Gateway Timeout'}
 ];
 
 const scenarioGenerator = () => {

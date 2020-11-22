@@ -41,11 +41,11 @@
           },
           "fields": [
             {
-              "path": "$.title",
+              "addPath": "$.title",
               "value": "Updating Scenario Body Fields"
             },
             {
-              "path": "$.body",
+              "addPath": "$.body",
               "value": "This test will verify updating json fields"
             }
           ]
@@ -105,11 +105,11 @@
         "request": {
           "fields": [
             {
-              "path": "$.title",
+              "addPath": "$.title",
               "value": "Updating Default Body from File"
             },
             {
-              "path": "$.body",
+              "addPath": "$.body",
               "value": "This test will verify updating json fields from the default one"
             }
           ]
@@ -164,11 +164,11 @@
         "request": {
           "fields": [
             {
-              "path": "$.title",
+              "addPath": "$.title",
               "value": "Updating Configs Body Fields"
             },
             {
-              "path": "$.body",
+              "addPath": "$.body",
               "value": "This test will verify updating json fields"
             }
           ]

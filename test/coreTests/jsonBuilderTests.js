@@ -1,96 +1,102 @@
-describe('Core: JsonBuilder Tests', () => {
-  const chai = require('chai');
+describe("Core: JsonBuilder Tests", () => {
+  const chai = require("chai");
   const expect = chai.expect;
   const fs = require("fs");
-  const { join } = require('path');
-  const JsonBuilder = require('../../core/jsonBuilder');
-  let json;
+  const { join } = require("path");
+  const JsonBuilder = require("../../core/jsonBuilder");
+  let scenarios = [
+    { field: "$.nullValue", addValue: null, updateValue: undefined },
+    { field: "$.undefinedValue", addValue: undefined, updateValue: null },
+    {
+      field: "$.stringValue",
+      addValue: "stringValue",
+      updateValue: "newStringValue",
+    },
+    { field: "$.intValue", addValue: 235, updateValue: 105 },
+    { field: "$.floatValue", addValue: 23.5, updateValue: 10.5 },
+    { field: "$.boolValue", addValue: true, updateValue: false },
+    { field: "$.arrayValue", addValue: [1, 2, 3], updateValue: [4, 5, 6] },
+    {
+      field: "$.objectValue",
+      addValue: { obj1: "obj1", obj2: "obj2" },
+      updateValue: { obj3: "obj3", obj4: [1, 2, 3] },
+    },
+  ];
 
-  beforeEach(() => {
-    json = {
-      firstName: 'Marc',
-      lastName: 'Dacz',
-      address: {
-        suburb: 'Mernda',
-        city: 'Melbourne',
-        state: 'VIC'
-      }
+  describe("JsonBuilder: CRUD Operations", () => {
+    let jsonBody;
+    let jb;
+
+    before(() => {
+      jsonBody = {
+        field: "value",
+      };
+      jb = new JsonBuilder(jsonBody);
+    });
+
+    for (const scenario of scenarios) {
+      it(`Adding field ${scenario.field}`, () => {
+        jb.add(scenario.field, scenario.addValue);
+        expect(jb.get(scenario.field)).to.equal(scenario.addValue);
+      });
+
+      it(`Updating field ${scenario.field}`, () => {
+        jb.update(scenario.field, scenario.updateValue);
+        expect(jb.get(scenario.field)).to.equal(scenario.updateValue);
+      });
+
+      it(`Deleting field ${scenario.field}`, () => {
+        jb.delete(scenario.field);
+        expect(jb.get(scenario.field)).to.equal(undefined);
+      });
     }
   });
 
-  it('should be able to initialise with empty json', () => {
-    let jb = new JsonBuilder();
-    expect(jb.get('$')).to.deep.equal({});
-  });
+  describe("JsonBuilder: Other Operations", () => {
+    let json = {
+      multipleSameFieldNames: {
+        item1: {
+          fieldName: "fieldValue",
+        },
+        item2: {
+          fieldName: "fieldValue",
+        },
+        item3: {
+          fieldName: "fieldValue",
+        },
+      },
+    };
 
-  it('should be able to initialise existing json', () => {
-    let jb = new JsonBuilder(json);
-    expect(jb.get('$')).to.deep.equal(json);
-  });
-
-  it('should be able to set json path values - null', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.nullValue', null);
-    expect(jb.get('$.nullValue')).to.deep.equal(null);
-  });
-
-  it('should be able to set json path values - string', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.alias', 'marcDacz');
-    expect(jb.get('$.alias')).to.deep.equal('marcDacz');
-  });
-
-  it('should be able to set json path values - number', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.age', 21);
-    expect(jb.get('$.age')).to.deep.equal(21);
-  });
-
-  it('should be able to set json path values - float', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.height', 182.88);
-    expect(jb.get('$.height')).to.deep.equal(182.88);
-  });
-
-  it('should be able to set json path values - boolean', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.isHandsome', true);
-    expect(jb.get('$.isHandsome')).to.deep.equal(true);
-  });
-
-  it('should be able to set json path values - array', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.hobbies', ['pc games', 'eating', 'watching movies']);
-    expect(jb.get('$.hobbies')).to.deep.equal(['pc games', 'eating', 'watching movies']);
-  });
-
-  it('should be able to set json path values - object', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.contacts', {
-      phone: '6123456789',
-      email: 'marcdacz@mail.com'
+    it("should be able to initialise with empty json", () => {
+      let jb = new JsonBuilder();
+      expect(jb.get("$")).to.deep.equal({});
     });
-    expect(jb.get('$.contacts')).to.deep.equal({
-      phone: '6123456789',
-      email: 'marcdacz@mail.com'
+
+    it("should be able to initialise existing json", () => {
+      let jb = new JsonBuilder(json);
+      expect(jb.get("$")).to.deep.equal(json);
     });
-  });
 
-  it('should be able to set json path values - undefined', () => {
-    let jb = new JsonBuilder(json);
-    jb.set('$.address', undefined);
-    expect(jb.get('$.address')).to.deep.equal(undefined);
-  });
+    it("should be able to save json", () => {
+      let jsonFileName = join(__dirname, "base.json");
+      if (fs.existsSync(jsonFileName)) fs.unlinkSync(jsonFileName);
+      expect(fs.existsSync(jsonFileName)).to.be.false;
 
-  it('should be able to save json', () => {
-    let jsonFileName = join(__dirname, 'base.json');
-    if (fs.existsSync(jsonFileName))
+      let jb = new JsonBuilder(json);
+      jb.save(jsonFileName);
+      expect(fs.existsSync(jsonFileName)).to.be.true;
+      expect(require(jsonFileName)).to.deep.equal(json);
       fs.unlinkSync(jsonFileName);
-    expect(fs.existsSync(jsonFileName)).to.be.false;
+    });
 
-    let jb = new JsonBuilder(json);
-    jb.save(jsonFileName);
-    expect(fs.existsSync(jsonFileName)).to.be.true;
-    fs.unlinkSync(jsonFileName);
+    it("should be able to set multiple json path values - null", () => {
+      let jb = new JsonBuilder(json);
+      jb.update("$..fieldName", "newFieldValue");
+      let fieldValues = jb.getAll("$..fieldName");
+      expect(fieldValues).to.have.length(3);
+      fieldValues.forEach((fieldValue) => {
+        expect(fieldValue).to.equal("newFieldValue");
+      });
+    });
   });
 });

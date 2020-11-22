@@ -29,12 +29,12 @@
       "request": {
         "body": {
           "id": 12345,
-          "title": "Using default method and endpoint",
+          "title": "Updating Fields from Scenario Body",
           "body": "This test uses the default method and endpoint"
         },
         "fields": [
-          { "path": "$.title", "value": "Updating Scenario Body Fields" },
-          { "path": "$.body", "value": "This test will verify updating json fields" }
+          { "addPath": "$.title", "value": "Updating Scenario Body Fields" },
+          { "addPath": "$.body", "value": "This test will verify updating json fields" }
         ]
       },
       "expected": {
@@ -73,8 +73,8 @@
       "test": "Updating Json Fields from Default Body Path",
       "request": {
         "fields": [
-          { "path": "$.title", "value": null },
-          { "path": "$.body", "value": "This test will verify updating json fields from the default one" }
+          { "addPath": "$.title", "value": null },
+          { "addPath": "$.body", "value": "This test will verify updating json fields from the default one" }
         ]
       },
       "expected": {

@@ -25,8 +25,8 @@
       "test": "Updating Fields of Body from Configs",      
       "request": {
         "fields": [
-          { "path": "$.title", "value": "Updating Configs Body Fields" },
-          { "path": "$.body", "value": "This test will verify updating json fields" }
+          { "addPath": "$.title", "value": "Updating Configs Body Fields" },
+          { "addPath": "$.body", "value": "This test will verify updating json fields" }
         ]
       },
       "expected": {
